@@ -1,5 +1,6 @@
 import os
 import picamera
+import datetime
 
 # Output directory where the photo will be saved
 output_directory = 'captured_images'
@@ -8,9 +9,14 @@ output_directory = 'captured_images'
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
 
+# Generate a timestamp for the image filename
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+image_filename = "captured_image_" + timestamp + ".jpg"
+image_path = os.path.join(output_directory, image_filename)
+
 # Initialize the camera
 with picamera.PiCamera() as camera:
-    # Capture a photo and save it as "test.jpg" in the output directory
-    camera.capture(os.path.join(output_directory, 'test.jpg'))
+    # Capture a photo and save it with the timestamped filename
+    camera.capture(image_path)
 
-print("Photo captured and saved as 'test.jpg' in 'captured_images' directory.")
+print("Photo captured and saved as '{}' in '{}' directory.".format(image_filename, output_directory))
