@@ -17,10 +17,8 @@ def capture_image(output_directory='captured_images'):
         with picamera.PiCamera() as camera:
             # Capture a photo and save it with the timestamped filename
             camera.capture(image_path)
+            print("Image saved as '{}'".format(image_filename))  # Print the filename
         return image_path  # Return the path of the saved image
     except Exception as e:
         print("Error: {}".format(e))
         return None  # Return None if the image capture fails
-
-# Example usage:
-# image_path = capture_image()
