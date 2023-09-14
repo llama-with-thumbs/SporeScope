@@ -13,7 +13,7 @@ def upload_image_to_firebase(image_path, firebase_image_path):
     blob = bucket.blob(firebase_image_path.replace("\\", "/"))
     blob.upload_from_filename(image_path.replace("\\", "/"), content_type="image/jpeg")
 
-    print(f"Image uploaded to Firebase Storage at '{firebase_image_path}'")
+    print("Image uploaded to Firebase Storage at '{}'".format(firebase_image_path))
 
     # End the Firebase session
     firebase_admin.delete_app(firebase_admin.get_app())
