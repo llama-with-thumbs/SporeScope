@@ -9,7 +9,7 @@ def capture_image(output_directory='captured_images'):
 
     # Generate a timestamp for the image filename
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    image_filename = f"captured_image_{timestamp}.jpg"
+    image_filename = "captured_image_" + timestamp + ".jpg"
     image_path = os.path.join(output_directory, image_filename)
 
     # Initialize the camera
