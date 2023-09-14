@@ -16,7 +16,7 @@ def capture_image(output_directory='captured_images'):
     with picamera.PiCamera() as camera:
         # Capture an image and save it to the specified path
         camera.capture(image_path)
-        print(f"Image saved at {image_path}")
+        print("Image saved at {}".format(image_path))  # Using string formatting
 
     # Return the path of the saved image
     return image_path
