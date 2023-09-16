@@ -1,9 +1,12 @@
 import schedule
 import time
 from capture_image import capture_image
-# from firebase_uploader import upload_image_to_firebase
 
-schedule.every(0.5).minutes.do(capture_image)
+# Define the interval in minutes (30 minutes)
+interval_minutes = 30
+
+# Schedule the capture_image function to run at the specified interval
+schedule.every(interval_minutes).minutes.do(capture_image)
 
 # Keep the script running to allow scheduled tasks
 while True:
@@ -13,8 +16,6 @@ while True:
     # Capture an image and get its path
     image_path = capture_image()
 
-    # Check if an image has been captured
+    # You can include additional logic here, such as uploading the image to Firebase
     # if image_path is not None:
-        # Call the upload_image_to_firebase function with the captured image path
-        # print("firebase".image_path)
-        # upload_image_to_firebase(image_path, image_path)
+    #     upload_image_to_firebase(image_path, image_path)
