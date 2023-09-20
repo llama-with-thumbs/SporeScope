@@ -15,9 +15,17 @@ def capture_image(output_directory='captured_images'):
     try:
         # Initialize the camera
         with picamera.PiCamera() as camera:
+            # Set the desired camera settings
+            camera.resolution = (2592, 1944)  # Resolution
+            camera.brightness = 50  # Brightness
+            camera.exposure_mode = 'auto'  # Exposure mode
+            camera.exposure_speed = 32955  # Exposure speed
+
             # Capture a photo and save it with the timestamped filename
             camera.capture(image_path)
             print("Image saved as '{}'".format(image_filename))  # Print the filename
+            # Close the camera within the 'with' block
+            camera.close()
         return image_path  # Return the path of the saved image
     except Exception as e:
         print("Error: {}".format(e))

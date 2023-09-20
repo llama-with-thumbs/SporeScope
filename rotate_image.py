@@ -1,29 +1,7 @@
 import cv2
-import os
 
-# Directory containing the images to be rotated
-input_directory = 'captured_images'
-
-# Output directory to save the rotated images
-output_directory = 'rotated_images'
-
-# Create the output directory if it doesn't exist
-if not os.path.exists(output_directory):
-    os.makedirs(output_directory)
-
-# Define the rotation angle in degrees
-angle = 2
-
-# List all files in the input directory
-file_list = os.listdir(input_directory)
-
-# Process each image file
-for filename in file_list:
-    if filename.endswith('.jpg'):
-        # Construct the full paths for input and output files
-        input_path = os.path.join(input_directory, filename)
-        output_path = os.path.join(output_directory, filename)
-
+def rotate_image(input_path, angle=2):
+    try:
         # Load the image
         image = cv2.imread(input_path)
 
@@ -37,9 +15,12 @@ for filename in file_list:
             # Perform the rotation
             rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))
 
-            # Save the rotated image
-            cv2.imwrite(output_path, rotated_image)
+            # Save the rotated image with the same filename, overwriting the original
+            cv2.imwrite(input_path, rotated_image)
 
-            print(f"Rotated and saved: {output_path}")
+            print(f"Rotated and saved: {input_path}")
+        else:
+            print(f"Error: Unable to load image at {input_path}")
 
-print("All images processed.")
+    except Exception as e:
+        print(f"Error: {e}")
