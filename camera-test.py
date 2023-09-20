@@ -14,4 +14,4 @@ exposure_speed = camera.exposure_speed
 camera.close()
 
 # Print the exposure time
-print(f"Automatic Exposure Time: {exposure_speed} microseconds")
+print("Automatic Exposure Time: {} microseconds".format(exposure_speed))
