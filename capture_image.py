@@ -18,14 +18,18 @@ def capture_image(output_directory='captured_images'):
             # Set the desired camera settings
             camera.resolution = (2592, 1944)  # Resolution
             camera.brightness = 50  # Brightness
-            camera.exposure_mode = 'auto'  # Exposure mode
-            camera.exposure_speed = 32955  # Exposure speed
+            
+            # Set the exposure speed in microseconds (e.g., 32955 for 1/30s)
+            camera.shutter_speed = 32955  # Exposure speed in microseconds
 
+            # Wait for the camera settings to stabilize
+            camera.exposure_mode = 'auto'  # Set exposure mode to auto
+            time.sleep(2)  # Wait for 2 seconds for the settings to take effect
+            
             # Capture a photo and save it with the timestamped filename
             camera.capture(image_path)
             print("Image saved as '{}'".format(image_filename))  # Print the filename
-            # Close the camera within the 'with' block
-            camera.close()
+
         return image_path  # Return the path of the saved image
     except Exception as e:
         print("Error: {}".format(e))
