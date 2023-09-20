@@ -8,6 +8,5 @@ interval_seconds = 10 * 60  # 10 minutes * 60 seconds/minute
 while True:
     # Capture an image and get its path
     image_path = capture_image()
-    rotate_image(image_path)
 
     time.sleep(interval_seconds)
