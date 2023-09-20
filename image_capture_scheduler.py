@@ -1,6 +1,5 @@
 import time
 from capture_image import capture_image
-from rotate_image import rotate_image
 
 # Define the interval in seconds (10 minutes)
 interval_seconds = 10 * 60  # 10 minutes * 60 seconds/minute
