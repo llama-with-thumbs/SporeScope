@@ -18,9 +18,9 @@ def rotate_image(input_path, angle=2):
             # Save the rotated image with the same filename, overwriting the original
             cv2.imwrite(input_path, rotated_image)
 
-            print(f"Rotated and saved: {input_path}")
+            print("Rotated and saved: {}".format(input_path))  # Use older string formatting here
         else:
-            print(f"Error: Unable to load image at {input_path}")
+            print("Error: Unable to load image at {}".format(input_path))
 
     except Exception as e:
-        print(f"Error: {e}")
+        print("Error: {}".format(e))
