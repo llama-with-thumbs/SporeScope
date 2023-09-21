@@ -1,7 +1,6 @@
 import os
 import picamera
 import datetime
-import time  # Import the time module
 
 def capture_image(output_directory='captured_images'):
     # Create the output directory if it doesn't exist
