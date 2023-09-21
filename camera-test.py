@@ -9,15 +9,15 @@ shutter_speed = 32955  # 1/30 second exposure time
 
 # Initialize the camera with the specified resolution
 camera = cv2.VideoCapture(0)
-camera.set(3, width)  # Set the width
-camera.set(4, height)  # Set the height
+# camera.set(3, width)  # Set the width
+# camera.set(4, height)  # Set the height
 
-# Set the shutter speed (if supported by the camera)
-camera.set(cv2.CAP_PROP_EXPOSURE, shutter_speed)
+# # Set the shutter speed (if supported by the camera)
+# camera.set(cv2.CAP_PROP_EXPOSURE, shutter_speed)
 
-# Set the white balance (e.g., AWB mode)
-camera.set(cv2.CAP_PROP_AUTO_WB, 0)  # Disable auto white balance
-camera.set(cv2.CAP_PROP_WB_TEMPERATURE, 3200)  # Set a custom white balance value (e.g., 3200 Kelvin)
+# # Set the white balance (e.g., AWB mode)
+# camera.set(cv2.CAP_PROP_AUTO_WB, 0)  # Disable auto white balance
+# camera.set(cv2.CAP_PROP_WB_TEMPERATURE, 3200)  # Set a custom white balance value (e.g., 3200 Kelvin)
 
 # Check if the camera opened successfully
 if not camera.isOpened():
