@@ -1,22 +1,16 @@
-import picamera
+import cv2
 
-def capture_image(image_filename):
-    try:
-        # Initialize the camera
-        with picamera.PiCamera() as camera:
-            # Set the resolution (adjust as needed)
-            camera.resolution = (1920, 1080)  # Example resolution
+# Initialize the camera
+camera = cv2.VideoCapture(0)
 
-            # Capture the image and save it
-            camera.capture(image_filename)
-            print(f"Image saved as {image_filename}")
+# Capture a single frame
+ret, frame = camera.read()
 
-    except Exception as e:
-        print(f"Error: {e}")
+# Save the captured frame as an image
+if ret:
+    cv2.imwrite('my_image.jpg', frame)
+else:
+    print('Error capturing image')
 
-if __name__ == "__main__":
-    # Specify the image filename
-    image_filename = "my_image.jpg"
-
-    # Call the capture_image function with the desired filename
-    capture_image(image_filename)
+# Release the camera
+camera.release()
