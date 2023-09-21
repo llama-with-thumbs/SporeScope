@@ -1,38 +1,29 @@
-import os
-import picamera
+import subprocess
 import datetime
-import time
-
+import os
 
 def capture_image(output_directory='captured_images'):
-    # Create the output directory if it doesn't exist
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
-
-    # Generate a timestamp for the image filename
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    image_filename = "captured_image_" + timestamp + ".jpg"
-    image_path = os.path.join(output_directory, image_filename)
-
     try:
-        # Initialize the camera
-        with picamera.PiCamera() as camera:
-            # Set the desired camera settings
-            camera.resolution = (2592, 1944)  # Resolution
-            camera.brightness = 50  # Brightness
-            
-            # Set the exposure speed in microseconds (e.g., 32955 for 1/30s)
-            camera.shutter_speed = 32955  # Exposure speed in microseconds
+        # Create the output directory if it doesn't exist
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory)
 
-            # Wait for the camera settings to stabilize
-            camera.exposure_mode = 'auto'  # Set exposure mode to auto
-            time.sleep(2)  # Wait for 2 seconds for the settings to take effect
-            
-            # Capture a photo and save it with the timestamped filename
-            camera.capture(image_path)
-            print("Image saved as '{}'".format(image_filename))  # Print the filename
+        # Capture an image using fswebcam
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        image_filename = f"captured_image_{timestamp}.jpg"
+        image_path = os.path.join(output_directory, image_filename)
+        subprocess.run(["fswebcam", "-r", "2592x1944", "--no-banner", image_path])
 
-        return image_path  # Return the path of the saved image
+        # Return the path of the captured image
+        return image_path
     except Exception as e:
-        print("Error: {}".format(e))
-        return None  # Return None if the image capture fails
+        print(f"Error capturing image: {e}")
+        return None
+
+# Example usage:
+if __name__ == "__main__":
+    image_path = capture_image()
+    if image_path:
+        print(f"Image saved as {image_path}")
+    else:
+        print("Image capture failed.")
