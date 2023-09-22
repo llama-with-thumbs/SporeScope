@@ -5,7 +5,7 @@ from rotate_image import rotate_image
 captured_images_folder = "captured_images"
 
 # Define the rotation angle
-rotation_angle = 2.5  # Rotation angle in degrees
+rotation_angle = -2.5  # Rotation angle in degrees
 
 # Check if the folder exists
 if os.path.exists(captured_images_folder) and os.path.isdir(captured_images_folder):
