@@ -28,8 +28,12 @@ def cut_and_save_rectangle(image_path, x, y, width, height, output_directory):
         # Save the cropped rectangle as a new image in the specified directory
         cv2.imwrite(output_path, cropped_image)
         print(f"Saved cropped image as {output_path}")
+        
+        # Return the path of the newly created cropped image
+        return output_path
     except Exception as e:
         print(f"Error: {str(e)}")
+        return None
 
 if __name__ == "__main__":
     if len(sys.argv) != 7:
@@ -41,4 +45,9 @@ if __name__ == "__main__":
         width = int(sys.argv[4])
         height = int(sys.argv[5])
         output_directory = sys.argv[6]
-        cut_and_save_rectangle(input_image, x, y, width, height, output_directory)
+        cropped_image_path = cut_and_save_rectangle(input_image, x, y, width, height, output_directory)
+        
+        if cropped_image_path:
+            print(f"Newly created cropped image path: {cropped_image_path}")
+        else:
+            print("Error occurred during image processing.")
