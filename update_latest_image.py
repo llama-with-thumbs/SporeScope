@@ -1,15 +1,15 @@
+import re
 from firebase_uploader import upload_image_to_firebase
 from remove_firebase_folder import remove_firebase_folder
-import os
 
 def update_latest_image(local_image_path):
     try:
-
-        # Parse local_image_path to extract the folder names and filename
-        folder_name = os.path.basename(os.path.dirname(os.path.dirname(local_image_path)))  # Extract another folder name
-        subfolder_name = os.path.basename(os.path.dirname(local_image_path))
+        # Extract folder names and filename from local_image_path using regular expression
+        path_parts = re.split(r'[\\/]', local_image_path)
+        folder_name = "captured_images"  # Extract the fourth-to-last element in the path
+        subfolder_name = path_parts[-2]  # Extract the third-to-last element in the path
         subsubfolder_name = "Latest_capture"
-        filename = os.path.basename(local_image_path)
+        filename = path_parts[-1]  # Extract the last element in the path
 
         # Remove images from the specified folder in Firebase Storage
         remove_firebase_folder(f"{folder_name}/{subfolder_name}/{subsubfolder_name}")
