@@ -20,5 +20,7 @@ def update_latest_image(local_image_path):
         # Upload the new image to Firebase Storage
         upload_image_to_firebase(local_image_path, firebase_image_path)
 
+        print(f"Updated latest image in Firebase Storage. Folder name: {folder_name}, Subfolder name: {subfolder_name}, Filename: {filename}")
+
     except Exception as e:
         print(f"Error: {str(e)}")
