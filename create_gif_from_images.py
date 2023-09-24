@@ -2,18 +2,19 @@
 
 import os
 import sys
-import imageio
-from PIL import Image
+from PIL import Image, ImageSequence
 
 # Get the directory where the script is located
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
-if len(sys.argv) != 2:
-    print("Usage: create_gif_from_images.py output_gif")
+if len(sys.argv) != 3:
+    print("Usage: create_gif_from_images.py output_gif duration")
     sys.exit(1)
 
 output_gif = sys.argv[1]
-input_folder = os.path.join(script_dir, "captured_images/A")  # Path to the input folder
+duration = int(float(sys.argv[2]) * 100)  # Duration in centiseconds
+
+input_folder = os.path.join(script_dir, "captured_images/B")  # Path to the input folder
 
 # List all image files in the folder
 image_files = [f for f in os.listdir(input_folder) if f.endswith((".png", ".jpg", ".jpeg", ".gif"))]
@@ -35,8 +36,8 @@ for image_file in image_files:
 gif_folder = os.path.join(script_dir, "gif_files")
 os.makedirs(gif_folder, exist_ok=True)
 
-# Save the images as a GIF in the GIF folder
+# Save the images as a GIF in the GIF folder with the specified duration
 output_gif_path = os.path.join(gif_folder, output_gif)
-imageio.mimsave(output_gif_path, images, duration=0.2)  # Adjust the duration as needed
+images[0].save(output_gif_path, save_all=True, append_images=images[1:], duration=duration, loop=0)
 
-print(f"GIF created and saved as {output_gif_path}")
+print(f"GIF created and saved as {output_gif_path} with a duration of {duration} centiseconds.")
