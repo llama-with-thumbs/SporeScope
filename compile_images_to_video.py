@@ -4,7 +4,7 @@ import datetime
 
 def compile_images_into_video(image_directory, output_video_path, frame_rate):
     image_files = [f for f in os.listdir(image_directory) if f.endswith('.jpg')]
-    image_files.sort()
+    image_files.sort()  # Ensure filenames are sorted in numerical order
 
     if len(image_files) == 0:
         print("No image files found in the directory.")
@@ -24,18 +24,15 @@ def compile_images_into_video(image_directory, output_video_path, frame_rate):
     video_writer.release()
     print(f"Video saved at {output_video_path}")
 
-def create_and_compile_video_folder(input_image_directory):
-    output_video_folder = 'compiled_videos'
-    if not os.path.exists(output_video_folder):
-        os.makedirs(output_video_folder)
+def create_and_compile_video_folder(input_image_directory, output_folder='compiled_videos', frame_rate=10):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_video_path = os.path.join(output_video_folder, f"video_{timestamp}.avi")
-
-    frame_rate = 10  # Adjust the frame rate as needed
+    output_video_path = os.path.join(output_folder, f"video_{timestamp}.avi")
 
     compile_images_into_video(input_image_directory, output_video_path, frame_rate)
 
 if __name__ == "__main__":
-    input_image_directory = 'captured_images'
+    input_image_directory = 'captured_images/A'
     create_and_compile_video_folder(input_image_directory)

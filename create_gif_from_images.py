@@ -26,8 +26,18 @@ if not image_files:
 # Sort image files by name to maintain order
 image_files.sort()
 
+# Initialize a counter to keep track of the images
+image_counter = 0
+
 images = []
 for image_file in image_files:
+    # Increment the counter for each image
+    image_counter += 1
+
+    # Skip every 5th image
+    if image_counter % 7 != 0:
+        continue
+
     image_path = os.path.join(input_folder, image_file)
     img = Image.open(image_path)
     images.append(img)

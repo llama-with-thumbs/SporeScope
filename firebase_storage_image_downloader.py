@@ -12,14 +12,22 @@ def download_images_from_firebase_folder(firebase_folder_path, local_directory):
     # List objects (images) in the specified Firebase Storage folder
     blobs = bucket.list_blobs(prefix=firebase_folder_path)
 
+    # Initialize a counter to keep track of the images
+    image_counter = 0
+
     for blob in blobs:
-        # Create the local file path for each image
-        local_image_path = local_directory + "/" + blob.name[len(firebase_folder_path):]
+        # Increment the counter for each image
+        image_counter += 1
 
-        # Download the image from Firebase Storage to the local directory
-        blob.download_to_filename(local_image_path.replace("\\", "/"))
+        # Check if the image number is a multiple of 10
+        if image_counter % 10 == 0:
+            # Create the local file path for each image
+            local_image_path = local_directory + "/" + blob.name[len(firebase_folder_path):]
 
-        print(f"Downloaded {blob.name} to '{local_image_path}'")
+            # Download the image from Firebase Storage to the local directory
+            blob.download_to_filename(local_image_path.replace("\\", "/"))
+
+            print(f"Downloaded {blob.name} to '{local_image_path}'")
 
     print("Download complete.")
 
