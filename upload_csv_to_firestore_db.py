@@ -6,10 +6,10 @@ import csv
 from add_collection_to_firestore_db import add_collection_to_firestore_db
 
 # Path to the CSV file
-csv_file_path = "output_data.csv"  # Replace with the actual CSV file name
+csv_file_path = "C_output_data.csv"  # Replace with the actual CSV file name
 
 # Name of the Firestore collection
-collection_name = "B_Mean_Blue_Intensity"
+collection_name = "C_Mean_Blue_Intensity"
 
 # Open and read the CSV file
 with open(csv_file_path, "r") as csv_file:

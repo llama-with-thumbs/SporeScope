@@ -31,4 +31,4 @@ def remove_firebase_folder(folder_path):
 
 if __name__ == "__main__":
     folder_path = "captured_images/B"  # Replace with the path of the folder you want to clear
-    remove_images_from_firebase_folder(folder_path)
+    remove_firebase_folder(folder_path)
