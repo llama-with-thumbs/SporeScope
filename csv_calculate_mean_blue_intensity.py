@@ -57,5 +57,5 @@ def main(folder_path, csv_filename):
 
 if __name__ == "__main__":
     folder_path = "captured_images/C"  # Replace with the path to your image folder
-    csv_filename = "C_output_data.csv"   # Replace with your desired CSV filename
+    csv_filename = "csv_data/mean_blue_intensity/C_output_data.csv"   # Replace with your desired CSV filename
     main(folder_path, csv_filename)
