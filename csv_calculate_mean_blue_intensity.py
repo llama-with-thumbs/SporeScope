@@ -56,6 +56,6 @@ def main(folder_path, csv_filename):
     print(f"Data written to {csv_filename}")
 
 if __name__ == "__main__":
-    folder_path = "captured_images/C"  # Replace with the path to your image folder
-    csv_filename = "csv_data/mean_blue_intensity/C_output_data.csv"   # Replace with your desired CSV filename
+    folder_path = "captured_images/A"  # Replace with the path to your image folder
+    csv_filename = "csv_data/mean_blue_intensity/A_output_data.csv"   # Replace with your desired CSV filename
     main(folder_path, csv_filename)
