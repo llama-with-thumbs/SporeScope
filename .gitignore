@@ -1,2 +1,5 @@
 # Ignore the captured_images folder and its contents
 captured_images/
+compiled_videos/
+compiled_videos_with_transitions/
+output_gif_folder/
