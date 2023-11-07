@@ -2,7 +2,7 @@ import cv2
 import sys
 import os
 
-def cut_and_save_rectangle(image_path, x, y, width, height, output_directory):
+def cut_and_save_snippet(image_path, x, y, width, height, flask, chamber):
     try:
         # Load the image
         image = cv2.imread(image_path)
@@ -14,16 +14,16 @@ def cut_and_save_rectangle(image_path, x, y, width, height, output_directory):
         cropped_image = image[y:y+height, x:x+width]
 
         # Get the directory and filename from the input path
-        directory, filename = os.path.split(image_path)
+        filename = os.path.basename(image_path)
 
         # Construct the output directory path
-        output_directory_path = os.path.join(directory, output_directory)
+        output_directory_path = os.path.join(chamber, flask)
 
         # Create the output directory if it doesn't exist
         os.makedirs(output_directory_path, exist_ok=True)
 
         # Construct the output path within the specified directory
-        output_path = os.path.join(output_directory_path, "cropped_" + filename)
+        output_path = os.path.join(output_directory_path, filename)
 
         # Save the cropped rectangle as a new image in the specified directory
         cv2.imwrite(output_path, cropped_image)
@@ -45,7 +45,7 @@ if __name__ == "__main__":
         width = int(sys.argv[4])
         height = int(sys.argv[5])
         output_directory = sys.argv[6]
-        cropped_image_path = cut_and_save_rectangle(input_image, x, y, width, height, output_directory)
+        cropped_image_path = cut_and_save_snippet(input_image, x, y, width, height, output_directory)
         
         if cropped_image_path:
             print(f"Newly created cropped image path: {cropped_image_path}")

@@ -13,9 +13,9 @@ def draw_red_rectangles(image_path):
 
         # Define the coordinates and dimensions of the rectangles
         rectangle_coordinates = [
-            (300, 890, 475, 550),  # (x, y, width, height) of the first rectangle
-            (1010, 890, 475, 550),  # (x, y, width, height) of the second rectangle
-            (1660, 890, 475, 550),   # (x, y, width, height) of the third rectangle
+            (410, 868, 425, 530),  # (x, y, width, height) of the first rectangle
+            (1060, 868, 425, 530),  # (x, y, width, height) of the second rectangle
+            (1700, 868, 425, 530),   # (x, y, width, height) of the third rectangle
         ]
 
         # Draw red rectangles on the image
@@ -50,11 +50,8 @@ def find_first_image_in_folder(folder_path):
     return first_image
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py folder_path")
-    else:
-        folder_path = sys.argv[1]
-        first_image_path = find_first_image_in_folder(folder_path)
-
-        if first_image_path:
-            draw_red_rectangles(first_image_path)
+    # Use "test.jpg" in the same folder as the script
+    current_folder = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(current_folder, "test.jpg")
+    
+    draw_red_rectangles(image_path)
