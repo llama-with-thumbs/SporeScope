@@ -15,19 +15,23 @@ height = 550
 y=890
 
 # Define the rotation angle
-rotation_angle = -2.5  # Rotation angle in degrees
+rotation_angle = -1.2  # Rotation angle in degrees
 
 # Define chamber name
 chamber = "CHA-AFBEFC"
+
+flask_a = "FLA-2783C2"
+flask_b = "FLA-74F078"
+flask_c = "FLA-D3610A"
 
 while True:
     # Capture an image and get its path
 
     image_path = capture_image()
 
-    upload_raw_image(image_path, chamber)
+    rotate_image(image_path, rotation_angle)
 
-    # rotate_image(image_path, rotation_angle)
+    upload_raw_image(image_path, chamber)
 
     # # Call the cut_and_save_rectangle function for each image
     # image_path_a = cut_and_save_rectangle(image_path, 1010, y , width, height, "A")

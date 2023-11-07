@@ -12,6 +12,7 @@ def capture_image(output_directory='captured_images'):
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         image_filename = f"captured_image_{timestamp}.jpg"
         image_path = os.path.join(output_directory, image_filename)
+
         subprocess.run(["fswebcam", "-r", "2592x1944", "--no-banner", image_path])
 
         # Return the path of the captured image
