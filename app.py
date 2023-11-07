@@ -37,7 +37,7 @@ while True:
     upload_raw_image(image_path, chamber)
 
     # # Call the cut_and_save_rectangle function for each image
-    snippet_path_a = cut_and_save_snippet(image_path, x1, y , width, height, flask_a)
+    snippet_path_a = cut_and_save_snippet(image_path, x1, y , width, height, flask_a, chamber)
     # image_path_b = cut_and_save_rectangle(image_path, x2, y , width, height, "B")
     # image_path_c = cut_and_save_rectangle(image_path, x3, y , width, height, "C")
 
