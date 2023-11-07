@@ -23,9 +23,9 @@ chamber = "CHA-AFBEFC"
 while True:
     # Capture an image and get its path
 
-    upload_raw_image("captured_images/CHA-AFBEFC/Raw images/image_captured_image_2023-09-21_16-06-07.jpg", chamber)
+    image_path = capture_image()
 
-    # image_path = capture_image()
+    upload_raw_image(image_path, chamber)
 
     # rotate_image(image_path, rotation_angle)
 
