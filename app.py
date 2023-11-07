@@ -15,7 +15,7 @@ height = 550
 y=890
 
 # Define the rotation angle
-rotation_angle = -1.2  # Rotation angle in degrees
+rotation_angle = 1.2  # Rotation angle in degrees
 
 # Define chamber name
 chamber = "CHA-AFBEFC"
