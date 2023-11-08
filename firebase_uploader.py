@@ -7,6 +7,8 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     cred = credentials.Certificate("bio-chart-firebase.json")
     firebase_admin.initialize_app(cred, {"storageBucket": "bio-chart.appspot.com"})
 
+    mean_red, mean_green, mean_blue = intensity
+
     # Reference to the Firebase Storage bucket
     bucket = storage.bucket()
 
@@ -28,7 +30,9 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     new_document = {
         "creation date": timestamp,
         "path": firebase_snippet_path,
-        "blue_intensity" : intensity
+        "mean_red_intensity" : mean_red,
+        "mean_green_intensity" : mean_green,
+        "mean_blue_intensity" : mean_blue
     }
 
     # Add the new document to the specified collection

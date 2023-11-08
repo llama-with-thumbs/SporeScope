@@ -6,7 +6,7 @@ from cut_and_save_snippet import cut_and_save_snippet
 # from update_latest_image import update_latest_image
 from upload_raw_image import upload_raw_image
 from datetime import datetime
-from calculate_intensity import calculate_intensity
+from calculate_mean_intensities import calculate_mean_intensities
 
 # Define the interval in seconds (30 minutes)
 interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
@@ -47,8 +47,8 @@ while True:
     # update_latest_image(image_path_b)
     # update_latest_image(image_path_c)
 
-    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber, timestamp, calculate_intensity(snippet_path_a))
-    upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_intensity(snippet_path_b))
-    upload_snippet_to_firebase(snippet_path_c, flask_c, chamber, timestamp, calculate_intensity(snippet_path_c))
+    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber, timestamp, calculate_mean_intensities(snippet_path_a))
+    upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b))
+    upload_snippet_to_firebase(snippet_path_c, flask_c, chamber, timestamp, calculate_mean_intensities(snippet_path_c))
 
     time.sleep(interval_seconds)
