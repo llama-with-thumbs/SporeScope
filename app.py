@@ -3,7 +3,7 @@ from capture_image import capture_image
 from firebase_uploader import upload_snippet_to_firebase
 from rotate_image import rotate_image
 from cut_and_save_snippet import cut_and_save_snippet
-from update_latest_image import update_latest_image
+# from update_latest_image import update_latest_image
 from upload_raw_image import upload_raw_image
 
 # Define the interval in seconds (10 minutes)
