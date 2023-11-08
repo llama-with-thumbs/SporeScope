@@ -28,11 +28,13 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     db = firestore.client()
 
     new_document = {
-        "creation date": timestamp,
+        "creation_date": timestamp,
         "path": firebase_snippet_path,
         "mean_red_intensity" : mean_red,
         "mean_green_intensity" : mean_green,
-        "mean_blue_intensity" : mean_blue
+        "mean_blue_intensity" : mean_blue,
+        "flask": flask,
+        "chamber": chamber
     }
 
     # Add the new document to the specified collection
