@@ -2,7 +2,8 @@ import cv2
 import sys
 import os
 
-def cut_and_save_snippet(image_path, x, y, width, height, flask, chamber):
+def cut_and_save_snippet(image_path, coordinates, flask, chamber):
+    x, y, width, height = coordinates
     try:
         # Load the image
         image = cv2.imread(image_path)

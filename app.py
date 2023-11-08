@@ -10,12 +10,9 @@ from upload_raw_image import upload_raw_image
 interval_seconds = 10 * 60  # 10 minutes * 60 seconds/minute
 
 # Define the coordinates for cropping
-width = 425
-height = 530
-y = 868
-x1 = 410
-x2 = 1060
-x3 = 1700
+coordinates_a = [410, 868, 425, 530]
+coordinates_b = [1060, 868 ,425 ,530]
+coordinates_c = [1700, 868 ,425 ,530]
 
 # Define the rotation angle
 rotation_angle = 1.2  # Rotation angle in degrees
@@ -23,6 +20,7 @@ rotation_angle = 1.2  # Rotation angle in degrees
 # Define chamber name
 chamber = "CHA-AFBEFC"
 
+# Define flasks names
 flask_a = "FLA-2783C2"
 flask_b = "FLA-74F078"
 flask_c = "FLA-D3610A"
@@ -37,7 +35,7 @@ while True:
     upload_raw_image(image_path, chamber)
 
     # # Call the cut_and_save_rectangle function for each image
-    snippet_path_a = cut_and_save_snippet(image_path, x1, y , width, height, flask_a, chamber)
+    snippet_path_a = cut_and_save_snippet(image_path, coordinates_a, flask_a, chamber)
     # image_path_b = cut_and_save_rectangle(image_path, x2, y , width, height, "B")
     # image_path_c = cut_and_save_rectangle(image_path, x3, y , width, height, "C")
 
