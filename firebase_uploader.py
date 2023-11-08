@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, storage, firestore
 import os
 
-def upload_snippet_to_firebase(image_path, flask, chamber, timestamp):
+def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity):
     # Initialize Firebase Admin SDK with credentials
     cred = credentials.Certificate("bio-chart-firebase.json")
     firebase_admin.initialize_app(cred, {"storageBucket": "bio-chart.appspot.com"})
@@ -27,7 +27,8 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp):
 
     new_document = {
         "creation date": timestamp,
-        "path": firebase_snippet_path
+        "path": firebase_snippet_path,
+        "blue_intensity" : intensity
     }
 
     # Add the new document to the specified collection
