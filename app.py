@@ -44,7 +44,7 @@ while True:
     # update_latest_image(image_path_c)
 
     upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
-    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
-    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
+    upload_snippet_to_firebase(snippet_path_b, flask_b, chamber)
+    upload_snippet_to_firebase(snippet_path_c, flask_c, chamber)
 
     time.sleep(interval_seconds)
