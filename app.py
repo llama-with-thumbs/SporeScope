@@ -5,6 +5,7 @@ from rotate_image import rotate_image
 from cut_and_save_snippet import cut_and_save_snippet
 # from update_latest_image import update_latest_image
 from upload_raw_image import upload_raw_image
+from datetime import datetime
 
 # Define the interval in seconds (10 minutes)
 interval_seconds = 10 * 60  # 10 minutes * 60 seconds/minute
@@ -27,12 +28,13 @@ flask_c = "FLA-D3610A"
 
 while True:
     # Capture an image and get its path
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-    image_path = capture_image()
+    image_path = capture_image(timestamp)
 
     rotate_image(image_path, rotation_angle)
 
-    upload_raw_image(image_path, chamber)
+    upload_raw_image(image_path, chamber, timestamp)
 
     # # Call the cut_and_save_rectangle function for each image
     snippet_path_a = cut_and_save_snippet(image_path, coordinates_a, flask_a, chamber)
@@ -43,8 +45,8 @@ while True:
     # update_latest_image(image_path_b)
     # update_latest_image(image_path_c)
 
-    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
-    upload_snippet_to_firebase(snippet_path_b, flask_b, chamber)
-    upload_snippet_to_firebase(snippet_path_c, flask_c, chamber)
+    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber, timestamp)
+    upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp)
+    upload_snippet_to_firebase(snippet_path_c, flask_c, chamber, timestamp)
 
     time.sleep(interval_seconds)

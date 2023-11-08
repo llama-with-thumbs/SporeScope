@@ -1,15 +1,13 @@
 import subprocess
-import datetime
 import os
 
-def capture_image(output_directory='captured_images'):
+def capture_image(timestamp, output_directory='captured_images'):
     try:
         # Create the output directory if it doesn't exist
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
 
         # Capture an image using fswebcam
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         image_filename = f"captured_image_{timestamp}.jpg"
         image_path = os.path.join(output_directory, image_filename)
 

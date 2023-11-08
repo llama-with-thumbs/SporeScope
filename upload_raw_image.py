@@ -1,10 +1,8 @@
 import os
 import firebase_admin
-import datetime
 from firebase_admin import credentials, storage, firestore
-from datetime import datetime
 
-def upload_raw_image(image_path, chamber):
+def upload_raw_image(image_path, chamber, timestamp):
     # Initialize Firebase Admin SDK with credentials
     cred = credentials.Certificate("bio-chart-firebase.json")
     firebase_admin.initialize_app(cred, {"storageBucket": "bio-chart.appspot.com"})
@@ -27,8 +25,6 @@ def upload_raw_image(image_path, chamber):
 
     # Create a Firestore client
     db = firestore.client()
-
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     new_document = {
         "creation date": timestamp,
