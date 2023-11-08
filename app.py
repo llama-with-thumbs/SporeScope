@@ -1,6 +1,6 @@
 import time
 from capture_image import capture_image
-from firebase_uploader import upload_image_to_firebase
+from firebase_uploader import upload_snippet_to_firebase
 from rotate_image import rotate_image
 from cut_and_save_snippet import cut_and_save_snippet
 from update_latest_image import update_latest_image
@@ -45,7 +45,7 @@ while True:
     # update_latest_image(image_path_b)
     # update_latest_image(image_path_c)
 
-    # upload_image_to_firebase(image_path_a, image_path_a)
+    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
     # upload_image_to_firebase(image_path_b, image_path_b)
     # upload_image_to_firebase(image_path_c, image_path_c)
 
