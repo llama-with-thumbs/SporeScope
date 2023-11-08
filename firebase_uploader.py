@@ -23,6 +23,3 @@ def upload_snippet_to_firebase(image_path, flask, chamber):
 
     # End the Firebase session
     firebase_admin.delete_app(firebase_admin.get_app())
-
-# Example usage:
-# upload_image_to_firebase("local_image.jpg", "images/remote_image.jpg")

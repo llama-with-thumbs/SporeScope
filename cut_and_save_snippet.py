@@ -13,7 +13,7 @@ def cut_and_save_snippet(image_path, x, y, width, height, flask, chamber):
         # Crop the rectangle from the image
         cropped_image = image[y:y+height, x:x+width]
 
-        # Get the directory and filename from the input path
+        # Get the filename from the input path
         filename = os.path.basename(image_path)
 
         # Construct the output directory path
