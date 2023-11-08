@@ -36,15 +36,15 @@ while True:
 
     # # Call the cut_and_save_rectangle function for each image
     snippet_path_a = cut_and_save_snippet(image_path, coordinates_a, flask_a, chamber)
-    # image_path_b = cut_and_save_rectangle(image_path, x2, y , width, height, "B")
-    # image_path_c = cut_and_save_rectangle(image_path, x3, y , width, height, "C")
+    snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
+    snippet_path_c = cut_and_save_snippet(image_path, coordinates_c, flask_c, chamber)
 
     # update_latest_image(image_path_a)
     # update_latest_image(image_path_b)
     # update_latest_image(image_path_c)
 
     upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
-    # upload_image_to_firebase(image_path_b, image_path_b)
-    # upload_image_to_firebase(image_path_c, image_path_c)
+    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
+    upload_snippet_to_firebase(snippet_path_a, flask_a, chamber)
 
     time.sleep(interval_seconds)
