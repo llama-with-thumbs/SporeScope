@@ -7,10 +7,11 @@ from cut_and_save_snippet import cut_and_save_snippet
 from upload_raw_image import upload_raw_image
 from datetime import datetime
 
-# Define the interval in seconds (10 minutes)
-interval_seconds = 10 * 60  # 10 minutes * 60 seconds/minute
+# Define the interval in seconds (30 minutes)
+interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
 
 # Define the coordinates for cropping
+# x, y, width, height
 coordinates_a = [410, 868, 425, 530]
 coordinates_b = [1060, 868 ,425 ,530]
 coordinates_c = [1700, 868 ,425 ,530]
