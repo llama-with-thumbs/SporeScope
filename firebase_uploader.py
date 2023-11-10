@@ -39,7 +39,6 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
 
     chamber_fields = {
         "chamber": chamber,
-        "creation_date": "1"
     }
 
     flask_fields = {
@@ -57,8 +56,9 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     chamber_doc_ref.set(chamber_fields)
 
     # Add the snippet document to the 'snippets' collection within the chamber document
-    flask_collection_ref = chamber_doc_ref.collection('flasks').add(flask_fields)
-    flask_collection_ref.add('snippets').add(snippet_fields)
+    flask_doc_ref = chamber_doc_ref.collection('flasks').document(flask)
+    flask_doc_ref.add(flask_fields)
+    # flask_collection_ref.add('snippets').add(snippet_fields)
 
     print("Document added successfully.")
 
