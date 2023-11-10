@@ -40,6 +40,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     chamber_fields = {
         "creation_date": timestamp,
         "flask": flask,
+        "substrate": "corn",
         "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis"
     }
 
@@ -47,10 +48,13 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
 
     bioChartCollection = db.collection('bio-chart')
 
-    chamberDoc = bioChartCollection.document(chamber).set(chamber_fields)
+    chamber_doc_ref = bioChartCollection.document(chamber)
+    chamber_doc_ref.set(chamber_fields)
 
-    chamberDoc.collection('flasks').document(chamber).collection('snippets').add(snippet_fields)
-
+    # Add the snippet document to the 'snippets' collection within the chamber document
+    snippets_collection_ref = chamber_doc_ref.collection('snippets')
+    snippets_collection_ref.add(snippet_fields)
+    
     print("Document added successfully.")
 
 
