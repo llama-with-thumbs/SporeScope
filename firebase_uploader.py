@@ -27,7 +27,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     # Create a Firestore client
     db = firestore.client()
 
-    new_document = {
+    snippet_fields = {
         "creation_date": timestamp,
         "path": firebase_snippet_path,
         "mean_red_intensity" : mean_red,
@@ -37,9 +37,24 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
         "chamber": chamber
     }
 
-    # Add the new document to the specified collection
-    db.collection('bio-chart').document(chamber).collection('flasks').document(flask).collection('snippets').add(new_document)
+    chamber_fields = {
+        "creation_date": timestamp,
+        "flask": flask,
+        "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis"
+    }
 
+    # Reference to the 'bio-chart' collection
+    bioChartCollection = db.collection('bio-chart')
+
+    # Add a new document to the 'flasks' collection within the 'chamber' document
+    flaskDocRef = bioChartCollection.document(chamber).collection('flasks').add(chamber_fields)
+
+    # Update the 'flask' field in the snippet_fields
+    snippet_fields["flask"] = flaskDocRef.id
+
+    # Add the snippet document to the 'snippets' collection within the 'flasks' document
+    flaskDocRef.collection('snippets').add(snippet_fields)
+    
     print("Document added successfully.")
 
 
