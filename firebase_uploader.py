@@ -47,7 +47,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
 
     bioChartCollection = db.collection('bio-chart')
 
-    chamberDoc = bioChartCollection.document(chamber).add(chamber_fields)
+    chamberDoc = bioChartCollection.document(chamber).set(chamber_fields)
 
     chamberDoc.collection('snippets').add(snippet_fields)
 
