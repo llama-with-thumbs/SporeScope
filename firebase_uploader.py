@@ -43,18 +43,14 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
         "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis"
     }
 
-    # Reference to the 'bio-chart' collection
+    # Add the new document to the specified collection
+
     bioChartCollection = db.collection('bio-chart')
 
-    # Add a new document to the 'flasks' collection within the 'chamber' document
-    flaskDocRef = bioChartCollection.document(chamber).collection('flasks').add(chamber_fields)
+    chamberDoc = bioChartCollection.document(chamber).collection('flasks').add(chamber_fields)
 
-    # Update the 'flask' field in the snippet_fields
-    snippet_fields["flask"] = flaskDocRef.id
+    chamberDoc.collection('snippets').add(snippet_fields)
 
-    # Add the snippet document to the 'snippets' collection within the 'flasks' document
-    flaskDocRef.collection('snippets').add(snippet_fields)
-    
     print("Document added successfully.")
 
 
