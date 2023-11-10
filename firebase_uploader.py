@@ -27,16 +27,6 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     # Create a Firestore client
     db = firestore.client()
 
-    snippet_fields = {
-        "creation_date": timestamp,
-        "path": firebase_snippet_path,
-        "mean_red_intensity" : mean_red,
-        "mean_green_intensity" : mean_green,
-        "mean_blue_intensity" : mean_blue,
-        "flask": flask,
-        "chamber": chamber
-    }
-
     chamber_fields = {
         "chamber": chamber,
     }
@@ -46,6 +36,16 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
         "flask": flask,
         "substrate": "corn",
         "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis"
+    }
+
+    snippet_fields = {
+        "creation_date": timestamp,
+        "path": firebase_snippet_path,
+        "mean_red_intensity" : mean_red,
+        "mean_green_intensity" : mean_green,
+        "mean_blue_intensity" : mean_blue,
+        "flask": flask,
+        "chamber": chamber
     }
 
     # Add the new document to the specified collection
@@ -63,8 +63,6 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     snippet_doc_ref.add(snippet_fields)
 
     print("Document added successfully.")
-
-
 
     # End the Firebase session
     firebase_admin.delete_app(firebase_admin.get_app())
