@@ -35,7 +35,8 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
         "last_update": timestamp,
         "flask": flask,
         "substrate": "corn",
-        "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis"
+        "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis",
+        "most_recent_snippet_path": firebase_snippet_path
     }
 
     snippet_fields = {
