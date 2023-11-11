@@ -30,7 +30,7 @@ flask_c = "FLA-D3610A"
 
 while True:
     # Capture an image and get its path
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    timestamp = datetime.now().isoformat()
 
     image_path = capture_image(timestamp)
 
