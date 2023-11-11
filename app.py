@@ -8,8 +8,8 @@ from upload_raw_image import upload_raw_image
 from datetime import datetime
 from calculate_mean_intensities import calculate_mean_intensities
 
-# Define the interval in seconds (3 minutes)
-interval_seconds = 3 * 60  # 30 minutes * 60 seconds/minute
+# Define the interval in seconds (30 minutes)
+interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
 
 # Define the coordinates for cropping
 # x, y, width, height
