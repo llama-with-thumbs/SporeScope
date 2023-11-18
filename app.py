@@ -16,7 +16,7 @@ interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
 coordinates_b = [1060, 868 ,425 ,530]
 
 # Define the rotation angle
-rotation_angle = 90  # Rotation angle in degrees
+rotation_angle = 180  # Rotation angle in degrees
 
 # Define chamber name
 chamber = "CHA-8BEA5D"
