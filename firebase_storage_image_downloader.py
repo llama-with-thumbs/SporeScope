@@ -20,7 +20,7 @@ def download_images_from_firebase_folder(firebase_folder_path, local_directory):
         image_counter += 1
 
         # Check if the image number is a multiple of 10
-        if image_counter % 10 == 0:
+        if image_counter % 100 == 0:
             # Create the local file path for each image
             local_image_path = local_directory + "/" + blob.name[len(firebase_folder_path):]
 

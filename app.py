@@ -19,7 +19,7 @@ coordinates_b = [1218 ,868 ,386 ,489]
 rotation_angle = 180  # Rotation angle in degrees
 
 # Define chamber name
-chamber = "CHA-8BEA5D"
+chamber = "CHA-8BEA5D1"
 
 # Define flasks names
 flask_b = "FLA-6A7F0"
