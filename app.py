@@ -13,7 +13,7 @@ interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
 
 # Define the coordinates for cropping
 # x, y, width, height
-coordinates_b = [1218 ,868 ,386 ,489]
+coordinates_b = [1518 ,898 ,386 ,489]
 
 # Define the rotation angle
 rotation_angle = 180  # Rotation angle in degrees
