@@ -22,7 +22,7 @@ rotation_angle = 180  # Rotation angle in degrees
 chamber = "CHA-8BEA5D1"
 
 # Define flasks names
-flask_b = "FLA-6A7F0"
+flask_b = "SMP-A0018B"
 
 while True:
     # Capture an image and get its path
