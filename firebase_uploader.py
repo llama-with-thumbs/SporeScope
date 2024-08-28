@@ -56,31 +56,23 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     bioChartCollection = db.collection('bio-chart')
 
     chamber_doc_ref = bioChartCollection.document(chamber)
-
-    chamber_doc_ref.set(chamber_fields, merge=True)
-
-     # Check if the chamber document exists
+    
+    # Check if the chamber document exists
     chamber_doc = chamber_doc_ref.get()
     if not chamber_doc.exists:
         # If it doesn't exist, set the creation date
         chamber_fields["creation_date"] = timestamp
-    
-    # Set (or update) the chamber document
+
     chamber_doc_ref.set(chamber_fields, merge=True)
 
-    # Reference to the flask document within the chamber
+    # Add the snippet document to the 'snippets' collection within the chamber document
     flask_doc_ref = chamber_doc_ref.collection('flasks').document(flask)
-
-    # Check if the flask document exists
-    flask_doc = flask_doc_ref.get()
-    if not flask_doc.exists:
-        # If it doesn't exist, set the creation date
-        flask_fields["creation_date"] = timestamp
-    
-    # Set (or update) the flask document
     flask_doc_ref.set(flask_fields, merge=True)
 
-    # Add the snippet document to the 'snippets' collection within the flask document
     snippet_doc_ref = flask_doc_ref.collection('snippets')
-    snippet_fields["creation_date"] = timestamp  # Always set creation_date for snippets
     snippet_doc_ref.add(snippet_fields)
+
+    print("Document added successfully.")
+
+    # End the Firebase session
+    firebase_admin.delete_app(firebase_admin.get_app())
