@@ -29,6 +29,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
 
     chamber_fields = {
         "chamber": chamber,
+        "last_update": timestamp
     }
 
     flask_fields = {
