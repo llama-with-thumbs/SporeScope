@@ -56,7 +56,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     bioChartCollection = db.collection('bio-chart')
 
     chamber_doc_ref = bioChartCollection.document(chamber)
-    
+
     # Check if the chamber document exists
     chamber_doc = chamber_doc_ref.get()
     if not chamber_doc.exists:
@@ -67,6 +67,13 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
 
     # Add the snippet document to the 'snippets' collection within the chamber document
     flask_doc_ref = chamber_doc_ref.collection('flasks').document(flask)
+
+    # Check if the flask document exists
+    flask_doc = flask_doc_ref.get()
+    if not flask_doc.exists:
+        # If it doesn't exist, set the creation date
+        flask_fields["gif_path"] = "gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif"
+
     flask_doc_ref.set(flask_fields, merge=True)
 
     snippet_doc_ref = flask_doc_ref.collection('snippets')
