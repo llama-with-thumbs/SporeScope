@@ -65,28 +65,19 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
 
     chamber_doc_ref.set(chamber_fields, merge=True)
 
-    # Reference to the flasks collection within the chamber document
-    flasks_collection_ref = chamber_doc_ref.collection('flasks')
+    # Add the snippet document to the 'snippets' collection within the chamber document
+    flask_doc_ref = chamber_doc_ref.collection('flasks').document(flask)
 
-    # Iterate over all flask documents in the flasks collection
-    for flask_doc in flasks_collection_ref.stream():
-        flask_doc_ref = flasks_collection_ref.document(flask_doc.id)
-        flask_data = flask_doc.to_dict()
+    # Check if the flask document exists
+    flask_doc = flask_doc_ref.get()
+    if flask_doc.exists:
+        flask_fields["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
+        print("Default gif path added.")
+                
+    flask_doc_ref.set(flask_fields, merge=True)
 
-        # Ensure gif_path is present
-        if "gif_path" not in flask_data:
-            flask_data["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
-            print(f"Default gif path added to flask {flask_doc.id}.")
-
-        # Set (or update) the flask document
-        flask_doc_ref.set(flask_data, merge=True)
-
-        # Add the snippet document to the 'snippets' collection within each flask document
-        snippet_doc_ref = flask_doc_ref.collection('snippets')
-        snippet_doc_ref.add(snippet_fields)
-
-    print(f"Snippet added to flask {flask_doc.id}.")
-
+    snippet_doc_ref = flask_doc_ref.collection('snippets')
+    snippet_doc_ref.add(snippet_fields)
 
     print("Document added successfully.")
 
