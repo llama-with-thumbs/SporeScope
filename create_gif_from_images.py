@@ -76,8 +76,7 @@ def create_gif_from_images(input_folder, output_gif, width, duration, skip):
 
             # Create a drawing context and font
             draw = ImageDraw.Draw(img_resized)
-            font = ImageFont.truetype("arial.ttf", size=20)  # You may need to specify a valid font file
-
+            font = ImageFont.load_default()
             # Position and text color for the hours annotation
             position = (10, 10)
             text_color = (255, 255, 255)
