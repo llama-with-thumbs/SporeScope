@@ -71,8 +71,12 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
     # Check if the flask document exists
     flask_doc = flask_doc_ref.get()
     if flask_doc.exists:
-        flask_fields["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
-        print("Default gif path added.")
+            # If the document exists, check if the gif_path field is present
+            existing_data = flask_doc.to_dict()
+            if "gif_path" not in existing_data:
+                # If gif_path is not present, add the default gif_path
+                flask_fields["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
+                print("Default gif path added.")
                 
     flask_doc_ref.set(flask_fields, merge=True)
 
