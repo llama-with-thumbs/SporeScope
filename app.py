@@ -14,7 +14,7 @@ interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
 
 # Define the coordinates for cropping
 # x, y, width, height
-coordinates_b = [1200, 798, 425, 530]
+coordinates_b = [1200, 798, 425, 530]l
 coordinates_c = [1700, 868 ,425 ,530]
 
 # Define the rotation angle
@@ -37,7 +37,7 @@ while True:
 
     upload_raw_image(image_path, chamber, timestamp)
 
-    upload_gif_file("output_gif_folder/SMP-A0018B.gif", chamber, flask_b)
+    upload_gif_file("output_gif_folder/FLA-5B4CD.gif", chamber, flask_b)
 
     # # Call the cut_and_save_rectangle function for each image
     snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
