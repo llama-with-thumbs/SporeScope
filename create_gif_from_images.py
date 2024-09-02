@@ -4,8 +4,13 @@ import os
 import sys
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
+import re
 
 def extract_date_time_from_filename(filename):
+    # match = re.search(r"\d{4}-\d{2}-\d{2}T\d{2}_\d{2}_\d{2}\.\d+", filename)
+    # if not match:
+    #     raise ValueError("No timestamp found")
+    # return datetime.strptime(match.group(0).replace('_', ':'), "%Y-%m-%dT%H:%M:%S.%f")
     try:
         # Assuming the filename follows a specific pattern, such as "cropped_captured_image_YYYY-MM-DD_HH-MM-SS.ext"
         parts = filename.split("_")
@@ -76,7 +81,7 @@ def create_gif_from_images(input_folder, output_gif, width, duration, skip):
 
             # Create a drawing context and font
             draw = ImageDraw.Draw(img_resized)
-            font = ImageFont.load_default()
+            font = ImageFont.truetype("DejaVuSans.ttf", 20)  # Ensure the font is available on your system
             # Position and text color for the hours annotation
             position = (10, 10)
             text_color = (255, 255, 255)
