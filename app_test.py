@@ -5,4 +5,4 @@ sample = "SMP-A0018B"
 
 # download_images_from_firebase_folder(f"captured_images/{sample}", f"captured_images/{sample}")
 # compile_images_into_video(f"captured_images/{sample}", f"captured_images/{sample}.avi", 20)
-create_gif_from_images(f"CHA-8BEA5D1/{sample}", f"{sample}.gif", 200, 1, 1)
+create_gif_from_images(f"CHA-8BEA5D1/{sample}", f"{sample}.gif", 200, 0.1, 1)
