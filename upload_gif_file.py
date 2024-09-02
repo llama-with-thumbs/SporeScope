@@ -15,7 +15,7 @@ def upload_gif_file(gif_path):
     file_name = os.path.basename(gif_path)
 
     # Define the category and updated firebase_gif_path
-    category = f"{chamber}/GIFs"
+    category = "output_gif_folder"
     firebase_gif_path = f"{category}/{file_name}"
 
     # Reference to the Firebase Storage bucket

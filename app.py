@@ -7,6 +7,7 @@ from cut_and_save_snippet import cut_and_save_snippet
 from upload_raw_image import upload_raw_image
 from datetime import datetime
 from calculate_mean_intensities import calculate_mean_intensities
+from upload_gif_file import upload_gif_file
 
 # Define the interval in seconds (30 minutes)
 interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
@@ -35,6 +36,8 @@ while True:
     rotate_image(image_path, rotation_angle)
 
     upload_raw_image(image_path, chamber, timestamp)
+
+    upload_gif_file("output_gif_folder/SMP-A0018B.gif")
 
     # # Call the cut_and_save_rectangle function for each image
     snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
