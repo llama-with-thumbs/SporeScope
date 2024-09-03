@@ -7,6 +7,7 @@ from cut_and_save_snippet import cut_and_save_snippet
 from upload_raw_image import upload_raw_image
 from datetime import datetime
 from calculate_mean_intensities import calculate_mean_intensities
+from create_gif_from_images import create_gif_from_images
 from upload_gif_file import upload_gif_file
 
 # Define the interval in seconds (30 minutes)
@@ -38,8 +39,10 @@ while True:
     upload_raw_image(image_path, chamber, timestamp)
 
     # do it only evey 12 houres.
-    upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
+    create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 1)
+    create_gif_from_images(f"{chamber}/{flask_c}", f"{flask_c}.gif", 200, 0.1, 1)
     upload_gif_file(f"output_gif_folder/{flask_c}.gif", chamber, flask_c)
+    upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
 
     # # Call the cut_and_save_rectangle function for each image
     snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
