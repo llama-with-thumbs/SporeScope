@@ -11,7 +11,6 @@ def extract_date_time_from_filename(filename):
     # if not match:
     #     raise ValueError("No timestamp found")
     # return datetime.strptime(match.group(0).replace('_', ':'), "%Y-%m-%dT%H:%M:%S.%f")
-   def extract_date_time_from_filename(filename):
     try:
         datetime_str = filename.split("_")[-1].split(".")[0]
         return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%f")
