@@ -28,7 +28,7 @@ def extract_date_time_from_filename(filename):
         print(f"An error occurred while extracting date and time: {str(e)}")
 
     # Default to the current date and time if extraction fails
-    return datetime.now()
+    return datetime
 
 def create_gif_from_images(input_folder, output_gif, width, duration, skip):
     try:
