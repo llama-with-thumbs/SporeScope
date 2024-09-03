@@ -11,6 +11,7 @@ def extract_date_time_from_filename(filename):
     # if not match:
     #     raise ValueError("No timestamp found")
     # return datetime.strptime(match.group(0).replace('_', ':'), "%Y-%m-%dT%H:%M:%S.%f")
+    print(filename)
     try:
         # Assuming the filename follows a specific pattern, such as "cropped_captured_image_YYYY-MM-DD_HH-MM-SS.ext"
         parts = filename.split("_")
@@ -22,7 +23,7 @@ def extract_date_time_from_filename(filename):
             datetime_str = f"{date_str} {time_str}"
             
             # Convert the extracted date and time to a datetime object
-            print(datetime.strptime(datetime_str, "%Y-%m-%d %H-%M-%S"))
+            print("*******")
             return datetime.strptime(datetime_str, "%Y-%m-%d %H-%M-%S")
         
     except Exception as e:
