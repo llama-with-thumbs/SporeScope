@@ -22,13 +22,14 @@ def extract_date_time_from_filename(filename):
             datetime_str = f"{date_str} {time_str}"
             
             # Convert the extracted date and time to a datetime object
+            print(datetime.strptime(datetime_str, "%Y-%m-%d %H-%M-%S"))
             return datetime.strptime(datetime_str, "%Y-%m-%d %H-%M-%S")
         
     except Exception as e:
         print(f"An error occurred while extracting date and time: {str(e)}")
 
     # Default to the current date and time if extraction fails
-    return datetime
+    return datetime.now()
 
 def create_gif_from_images(input_folder, output_gif, width, duration, skip):
     try:
