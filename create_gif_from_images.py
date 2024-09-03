@@ -11,12 +11,17 @@ def extract_date_time_from_filename(filename):
     # if not match:
     #     raise ValueError("No timestamp found")
     # return datetime.strptime(match.group(0).replace('_', ':'), "%Y-%m-%dT%H:%M:%S.%f")
-    try:
-        datetime_str = filename.split("_")[-1].split(".")[0]
-        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%f")
-    except Exception as e:
-        print(f"Error: {e}")
-        return datetime.now()
+    datetime_str = filename.split("_")[-1].split(".")[0]
+    
+    # Attempt parsing with and without fractional seconds
+    for fmt in ("%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S"):
+        try:
+            return datetime.strptime(datetime_str, fmt)
+        except ValueError:
+            continue
+    
+    print(f"Error: time data '{datetime_str}' does not match expected format")
+    return datetime.now()
 
 def create_gif_from_images(input_folder, output_gif, width, duration, skip):
     try:
