@@ -39,8 +39,8 @@ while True:
     # # Call the cut_and_save_rectangle function for each image
     snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
 
-    create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 1)
-    upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
+    # create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 1)
+    # upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
 
     upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b))
 
