@@ -3,7 +3,6 @@ from capture_image import capture_image
 from firebase_uploader import upload_snippet_to_firebase
 from rotate_image import rotate_image
 from cut_and_save_snippet import cut_and_save_snippet
-# from update_latest_image import update_latest_image
 from upload_raw_image import upload_raw_image
 from datetime import datetime
 from calculate_mean_intensities import calculate_mean_intensities
@@ -28,7 +27,6 @@ chamber = "CHA-8BEA5D1"
 flask_b = "SMP-9414B8"
 
 while True:
-    # Capture an image and get its path
     timestamp = datetime.now().isoformat()
 
     image_path = capture_image(timestamp)
@@ -37,7 +35,6 @@ while True:
 
     upload_raw_image(image_path, chamber, timestamp)
 
-    # # Call the cut_and_save_rectangle function for each image
     snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
 
     upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b), calculate_green_object_area(snippet_path_b))
