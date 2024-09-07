@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, storage, firestore
 import os
 
-def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity):
+def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity, object_area):
     # Initialize Firebase Admin SDK with credentials
     cred = credentials.Certificate("bio-chart-firebase.json")
     firebase_admin.initialize_app(cred, {"storageBucket": "bio-chart.appspot.com"})
@@ -46,6 +46,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity)
         "mean_red_intensity" : mean_red,
         "mean_green_intensity" : mean_green,
         "mean_blue_intensity" : mean_blue,
+        "object_area": object_area,
         "flask": flask,
         "chamber": chamber
     }

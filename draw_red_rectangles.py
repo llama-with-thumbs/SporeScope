@@ -14,7 +14,7 @@ def draw_red_rectangles(image_path):
         # Define the coordinates and dimensions of the rectangles
         rectangle_coordinates = [
             (410, 868, 425, 530),  # (x, y, width, height) of the first rectangle
-            (1060, 868, 425, 530),  # (x, y, width, height) of the second rectangle
+            (1180, 568, 425, 530),  # (x, y, width, height) of the second rectangle
             (1700, 868, 425, 530),   # (x, y, width, height) of the third rectangle
         ]
 
