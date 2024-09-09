@@ -39,7 +39,7 @@ while True:
 
     upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b), calculate_green_object_area(snippet_path_b))
 
-    create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 1)
+    create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.01, 1)
     upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
 
     time.sleep(interval_seconds)
