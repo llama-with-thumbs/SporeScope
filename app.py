@@ -31,11 +31,9 @@ while True:
 
     image_path = capture_image(timestamp)
 
-    break
-
     # rotate_image(image_path, rotation_angle)
 
-    # upload_raw_image(image_path, chamber, timestamp)
+    upload_raw_image(image_path, chamber, timestamp)
 
     # snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
 
