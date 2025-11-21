@@ -29,7 +29,9 @@ flask_b = "SMP-9414B8"
 while True:
     timestamp = datetime.now().isoformat()
 
-    # image_path = capture_image(timestamp)
+    image_path = capture_image(timestamp)
+
+    break
 
     # rotate_image(image_path, rotation_angle)
 
