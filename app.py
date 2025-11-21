@@ -29,17 +29,17 @@ flask_b = "SMP-9414B8"
 while True:
     timestamp = datetime.now().isoformat()
 
-    image_path = capture_image(timestamp)
+    # image_path = capture_image(timestamp)
 
-    rotate_image(image_path, rotation_angle)
+    # rotate_image(image_path, rotation_angle)
 
-    upload_raw_image(image_path, chamber, timestamp)
+    # upload_raw_image(image_path, chamber, timestamp)
 
-    snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
+    # snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
 
-    upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b), calculate_green_object_area(snippet_path_b))
+    # upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b), calculate_green_object_area(snippet_path_b))
 
-    create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 10)
-    upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
+    # create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 10)
+    # upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
 
-    time.sleep(interval_seconds)
+    # time.sleep(interval_seconds)
