@@ -1,10 +1,9 @@
-# Ignore the captured_images folder and its contents
+.venv/
 captured_images/
 compiled_videos/
 compiled_videos_with_transitions/
 output_gif_folder/
 __pycache__/
-CHA-18E9A7/
-# Ignore system files
-.venv/
 
+firebase-adminsdk.json
+config.py

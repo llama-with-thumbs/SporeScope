@@ -1,45 +1,51 @@
 import time
-from capture_image import capture_image
-from firebase_uploader import upload_snippet_to_firebase
-from rotate_image import rotate_image
-from cut_and_save_snippet import cut_and_save_snippet
-from upload_raw_image import upload_raw_image
 from datetime import datetime
-from calculate_mean_intensities import calculate_mean_intensities
-from create_gif_from_images import create_gif_from_images
-from upload_gif_file import upload_gif_file
-from calculate_green_object_area import calculate_green_object_area
 
-# Define the interval in seconds (30 minutes)
-interval_seconds = 30 * 60  # 30 minutes * 60 seconds/minute
+from core.capture_image import capture_image
+from firebase_io.firebase_uploader import upload_snippet_to_firebase
+from image_processing.rotate_image import rotate_image
+from image_processing.cut_and_save_snippet import cut_and_save_snippet
+from firebase_io.upload_raw_image import upload_raw_image
+from image_processing.calculate_mean_intensities import calculate_mean_intensities
+from image_processing.create_gif_from_images import create_gif_from_images
+from firebase_io.upload_gif_file import upload_gif_file
+from image_processing.calculate_green_object_area import calculate_green_object_area
+from config import (
+    INTERVAL_SECONDS,
+    COORDINATES,
+    ROTATION_ANGLE,
+    CHAMBER,
+    PLATE_ID,
+)
 
-# Define the coordinates for cropping
-# x, y, width, height
-coordinates_b = [1180, 568, 425, 530]
 
-# Define the rotation angle
-rotation_angle = 180  # Rotation angle in degrees
+def run_capture_loop():
+    while True:
+        timestamp = datetime.now().isoformat()
 
-# Define chamber name
-chamber = "CHA-8BEA5D1"
+        image_path = capture_image(timestamp)
+        image_path = "test.jpg"
 
-# Define flasks names
-flask_b = "SMP-9414B8"
+        rotate_image(image_path, ROTATION_ANGLE)
 
-while True:
-    timestamp = datetime.now().isoformat()
+        upload_raw_image(image_path, CHAMBER, timestamp)
 
-    image_path = capture_image(timestamp)
+        snippet_path = cut_and_save_snippet(image_path, COORDINATES, PLATE_ID, CHAMBER)
 
-    # rotate_image(image_path, rotation_angle)
+        upload_snippet_to_firebase(
+            snippet_path,
+            PLATE_ID,
+            CHAMBER,
+            timestamp,
+            calculate_mean_intensities(snippet_path),
+            calculate_green_object_area(snippet_path),
+        )
 
-    upload_raw_image(image_path, chamber, timestamp)
+        # create_gif_from_images(f"captured_images/{CHAMBER}/{PLATE_ID}", f"{PLATE_ID}.gif", 200, 0.1, 10)
+        # upload_gif_file(f"output_gif_folder/{PLATE_ID}.gif", CHAMBER, PLATE_ID)
 
-    # snippet_path_b = cut_and_save_snippet(image_path, coordinates_b, flask_b, chamber)
+        time.sleep(INTERVAL_SECONDS)
 
-    # upload_snippet_to_firebase(snippet_path_b, flask_b, chamber, timestamp, calculate_mean_intensities(snippet_path_b), calculate_green_object_area(snippet_path_b))
 
-    # create_gif_from_images(f"{chamber}/{flask_b}", f"{flask_b}.gif", 200, 0.1, 10)
-    # upload_gif_file(f"output_gif_folder/{flask_b}.gif", chamber, flask_b)
-
-    # time.sleep(interval_seconds)
+if __name__ == "__main__":
+    run_capture_loop()
