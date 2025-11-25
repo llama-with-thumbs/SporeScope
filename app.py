@@ -24,7 +24,6 @@ def run_capture_loop():
         timestamp = datetime.now().isoformat()
 
         image_path = capture_image(timestamp)
-        image_path = "test.jpg"
 
         rotate_image(image_path, ROTATION_ANGLE)
 
