@@ -2,7 +2,7 @@ import cv2
 import sys
 import os
 
-def cut_and_save_snippet(image_path, coordinates, flask, chamber):
+def cut_and_save_snippet(image_path, coordinates, plate, chamber):
     x, y, width, height = coordinates
     try:
         # Load the image
@@ -18,7 +18,7 @@ def cut_and_save_snippet(image_path, coordinates, flask, chamber):
         filename = os.path.basename(image_path)
 
         # Construct the output directory path
-        output_directory_path = os.path.join("captured_images", chamber, flask)
+        output_directory_path = os.path.join("captured_images", chamber, plate)
 
         # Create the output directory if it doesn't exist
         os.makedirs(output_directory_path, exist_ok=True)

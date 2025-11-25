@@ -10,13 +10,6 @@ from image_processing.calculate_mean_intensities import calculate_mean_intensiti
 from image_processing.create_gif_from_images import create_gif_from_images
 from firebase_io.upload_gif_file import upload_gif_file
 from image_processing.calculate_green_object_area import calculate_green_object_area
-from config import (
-    INTERVAL_SECONDS,
-    COORDINATES,
-    ROTATION_ANGLE,
-    CHAMBER,
-    PLATE_ID,
-)
 
 from config import (
     INTERVAL_SECONDS,
@@ -41,4 +34,4 @@ upload_snippet_to_firebase(
     calculate_mean_intensities(snippet_path),
     calculate_green_object_area(snippet_path),
 )
-create_gif_from_images(f"captured_images/{CHAMBER}/{PLATE_ID}", f"{PLATE_ID}.gif", 200, 0.1, 10)
+

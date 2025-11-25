@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, storage, firestore
 import os
 
-def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity, object_area):
+def upload_snippet_to_firebase(image_path, plate, chamber, timestamp, intensity, object_area):
     # Initialize Firebase Admin SDK with credentials
     cred = credentials.Certificate("firebase-adminsdk.json")
     firebase_admin.initialize_app(cred, {
@@ -17,7 +17,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity,
     # Get the filename from the input path
     filename = os.path.basename(image_path)
 
-    firebase_snippet_path = f"{chamber}/{flask}/{filename}"
+    firebase_snippet_path = f"{chamber}/{plate}/{filename}"
     
     # Upload the image to Firebase Storage
     blob = bucket.blob(firebase_snippet_path)
@@ -34,9 +34,9 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity,
         "last_update": timestamp
     }
 
-    flask_fields = {
+    plate_fields = {
         "last_update": timestamp,
-        "flask": flask,
+        "plate": plate,
         "substrate": "corn",
         "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis",
         "most_recent_snippet_path": firebase_snippet_path
@@ -49,7 +49,7 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity,
         "mean_green_intensity" : mean_green,
         "mean_blue_intensity" : mean_blue,
         "object_area": object_area,
-        "flask": flask,
+        "plate": plate,
         "chamber": chamber
     }
 
@@ -69,16 +69,16 @@ def upload_snippet_to_firebase(image_path, flask, chamber, timestamp, intensity,
     chamber_doc_ref.set(chamber_fields, merge=True)
 
     # Add the snippet document to the 'snippets' collection within the chamber document
-    flask_doc_ref = chamber_doc_ref.collection('flasks').document(flask)
+    plate_doc_ref = chamber_doc_ref.collection('plates').document(plate)
 
-    # Check if the flask document exists
-    flask_doc = flask_doc_ref.get()
-    if not flask_doc.exists:
-        flask_fields["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
+    # Check if the plate document exists
+    plate_doc = plate_doc_ref.get()
+    if not plate_doc.exists:
+        plate_fields["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
         print("Default gif path added.")
 
-    flask_doc_ref.set(flask_fields, merge=True)
-    snippet_doc_ref = flask_doc_ref.collection('snippets')
+    plate_doc_ref.set(plate_fields, merge=True)
+    snippet_doc_ref = plate_doc_ref.collection('snippets')
     snippet_doc_ref.add(snippet_fields)
                 
     print("Document added successfully.")
