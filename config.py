@@ -4,7 +4,7 @@ CULTURE = "link to the culture protocol"
 
 # --- Capture Settings ---
 INTERVAL_SECONDS = 30 * 60
-ROTATION_ANGLE = 2
+ROTATION_ANGLE = 1
 COORDINATES = [1180, 568, 425, 530]
 RAW_COORDINATES = [750, 500, 2100, 1450]
 
