@@ -11,12 +11,13 @@ def capture_image(timestamp, output_directory='captured_images'):
         image_filename = f"captured_image_{timestamp}.jpg"
         image_path = os.path.join(output_directory, image_filename)
 
-        subprocess.run([
-            "rpicam-still",      # or "libcamera-still" if using older Pi OS
-            "-o", image_path,    # output file
-            "-n"                 # no preview (important for headless mode)
-        ], check=True)
-
+        subprocess.run(
+            ["rpicam-still", "-o", image_path, "-n"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True
+        )
+        
         # Return the path of the captured image
         return image_path
     except Exception as e:
