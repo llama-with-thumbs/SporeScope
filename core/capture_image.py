@@ -17,9 +17,10 @@ def capture_image(timestamp, output_directory='captured_images'):
             stderr=subprocess.DEVNULL,
             check=True
         )
-        
+
         # Return the path of the captured image
         return image_path
+        
     except Exception as e:
         print(f"Error capturing image: {e}")
         return None

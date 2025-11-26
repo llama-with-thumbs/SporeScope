@@ -1,27 +1,31 @@
 Quick Start Instructions:
 
+This project is designed to run on Raspberry Pi devices of different generations equipped with different camera modules. Due to hardware and configuration variations, some setup errors may occur during installation.
+
 1. Clone the project:
-git clone <your-repo-url>
-cd SporeScope
+    git clone https://github.com/llama-with-thumbs/SporeScope.git
+    cd SporeScope
 
 2. Create and activate a virtual environment:
-python -m venv .venv
-source .venv/bin/activate
-Windows users: .venv\Scripts\activate
+    python -m venv .venv
+    source .venv/Scripts/activate
 
 3. Install dependencies:
-pip install -r requirements.txt
-Or manually install: firebase-admin, google-cloud-storage, opencv-python, numpy, pillow, python-dotenv
+    pip install -r requirements.txt
 
 4. Firebase setup:
-    • Open Firebase Console
-    • Go to Project Settings → Service Accounts
-    • Click “Generate new private key” and download the JSON file
-    • Rename the file to firebase-adminsdk.json
-    • Place the file in the same folder as app.py
+    create firebase-adminsdk.json with credentials 
 
-5. Optional test:
-python test_firebase.py
+5. Create config.py
+    Add basic settings such as:
+    INTERVAL_SECONDS, RAW_COORDINATES, ROTATION_ANGLE, CHAMBER, PLATE_ID
 
 6. Run the app:
-python app.py
+    python app.py
+
+7. Run using tmux (for Raspberry Pi)
+    tmux
+    python app.py
+    Ctrl+B then D to detach
+    tmux attach to rejoin
+   

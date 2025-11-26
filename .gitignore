@@ -6,4 +6,3 @@ output_gif_folder/
 __pycache__/
 
 firebase-adminsdk.json
-config.py

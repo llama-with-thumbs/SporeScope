@@ -25,7 +25,7 @@ def run_capture_loop():
 
         image_path = capture_image(timestamp)
 
-        rotate_and_crop_image(image_path, ROTATION_ANGLE, RAW_COORDINATES)
+        rotate_and_crop_image(image_path, ROTATION_ANGLE)
 
         upload_raw_image(image_path, CHAMBER, timestamp)
 
