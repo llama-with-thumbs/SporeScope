@@ -18,7 +18,6 @@ from config import (
     PLATE_ID,
 )
 
-
 def run_capture_loop():
     while True:
         timestamp = datetime.now().isoformat()

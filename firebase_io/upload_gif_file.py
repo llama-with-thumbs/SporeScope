@@ -2,7 +2,7 @@ import os
 import firebase_admin
 from firebase_admin import credentials, storage, firestore
 
-def upload_gif_file(gif_path,  chamber, plate):
+def upload_gif_file(gif_path, chamber, plate):
     # Initialize Firebase Admin SDK with credentials
     cred = credentials.Certificate("bio-chart-firebase.json")
     firebase_admin.initialize_app(cred, {"storageBucket": "bio-chart.appspot.com"})
@@ -27,9 +27,9 @@ def upload_gif_file(gif_path,  chamber, plate):
     db = firestore.client()
 
     # Add the new document to the specified collection
-    flask_doc_ref = db.collection('bio-chart').document(chamber).collection('plates').document(plate)
+    plate_doc_ref = db.collection('bio-chart').document(chamber).collection('plates').document(plate)
 
-    flask_doc_ref.update({
+    plate_doc_ref.update({
         'gif_path': firebase_gif_path
     })
 

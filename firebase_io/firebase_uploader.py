@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials, storage, firestore
 import os
+import config
 
 def upload_snippet_to_firebase(image_path, plate, chamber, timestamp, intensity, object_area):
     # Initialize Firebase Admin SDK with credentials
@@ -37,8 +38,8 @@ def upload_snippet_to_firebase(image_path, plate, chamber, timestamp, intensity,
     plate_fields = {
         "last_update": timestamp,
         "plate": plate,
-        "substrate": "corn",
-        "culture": "https://en.wikipedia.org/wiki/Psilocybe_cubensis",
+        "substrate": config.SUBSTRATE,
+        "culture": config.CULTURE,
         "most_recent_snippet_path": firebase_snippet_path
     }
 
@@ -70,12 +71,6 @@ def upload_snippet_to_firebase(image_path, plate, chamber, timestamp, intensity,
 
     # Add the snippet document to the 'snippets' collection within the chamber document
     plate_doc_ref = chamber_doc_ref.collection('plates').document(plate)
-
-    # Check if the plate document exists
-    plate_doc = plate_doc_ref.get()
-    if not plate_doc.exists:
-        plate_fields["gif_path"] = 'gs://bio-chart.appspot.com/CHA-AFBEFC/Gifs/A.gif'
-        print("Default gif path added.")
 
     plate_doc_ref.set(plate_fields, merge=True)
     snippet_doc_ref = plate_doc_ref.collection('snippets')
