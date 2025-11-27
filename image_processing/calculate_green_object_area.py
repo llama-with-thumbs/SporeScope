@@ -1,38 +1,35 @@
 import cv2
 import numpy as np
 
-def calculate_green_object_area(image_paths):
-    """
-    Accepts either a single image path (string) or a list of image paths.
-    Returns the area (int) or list of areas.
-    """
-    
-    # Normalize input to list
-    if isinstance(image_paths, str):
-        image_paths = [image_paths]
+def calculate_green_object_area(image_path):
+    # Load the image from the given path
+    image = cv2.imread(image_path)
 
-    areas = []  # To collect results
+    # Convert the image to HSV color space to better detect the green color
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    for image_path in image_paths:
-        image = cv2.imread(image_path)
+    # Define the range of green color in HSV
+    lower_green = np.array([35, 100, 100])
+    upper_green = np.array([85, 255, 255])
 
-        if image is None:
-            print(f"⚠ Warning: Could not open image: {image_path}")
-            areas.append(None)
-            continue
+    # Create a mask for green objects
+    mask = cv2.inRange(hsv, lower_green, upper_green)
 
-        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # Apply minimal Gaussian Blur (using a small kernel size for minimal smoothing)
+    mask = cv2.GaussianBlur(mask, (3, 3), 0)
 
-        lower_green = np.array([35, 100, 100])
-        upper_green = np.array([85, 255, 255])
+    # Convert the mask to grayscale for contour detection
+    gray_mask = mask
 
-        mask = cv2.inRange(hsv, lower_green, upper_green)
-        mask = cv2.GaussianBlur(mask, (3, 3), 0)
+    # Find contours in the masked grayscale image
+    contours, _ = cv2.findContours(gray_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Variable to store the total surface area of the object(s)
+    total_area = 0
 
-        total_area = sum(cv2.contourArea(contour) for contour in contours)
-        areas.append(total_area)
+    # Loop through each contour, calculate area
+    for contour in contours:
+        area = cv2.contourArea(contour)
+        total_area += area  # Add the area to the total
 
-    # If the input was a single path, return a single value instead of list
-    return areas[0] if len(areas) == 1 else areas
+    return total_area

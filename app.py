@@ -34,14 +34,15 @@ def run_capture_loop():
         # snippet_path = cut_and_save_snippet(image_path, COORDINATES, PLATE_ID, CHAMBER)
         snippet_path = cut_and_save_circle_snippets(image_path, CIRCLE_COORDS, PLATE_ID, CHAMBER)
 
-        upload_snippet_to_firebase(
-            snippet_path,
-            PLATE_ID,
-            CHAMBER,
-            timestamp,
-            calculate_mean_intensities(snippet_path),
-            calculate_green_object_area(snippet_path),
-        )
+        print(f"Snippet path(s): {snippet_path}")
+        # upload_snippet_to_firebase(
+        #     snippet_path,
+        #     PLATE_ID,
+        #     CHAMBER,
+        #     timestamp,
+        #     calculate_mean_intensities(snippet_path),
+        #     calculate_green_object_area(snippet_path),
+        # )
 
         # create_gif_from_images(f"captured_images/{CHAMBER}/{PLATE_ID}", f"{PLATE_ID}.gif", 200, 0.1, 10)
         # upload_gif_file(f"output_gif_folder/{PLATE_ID}.gif", CHAMBER, PLATE_ID)
