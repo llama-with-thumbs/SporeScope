@@ -10,13 +10,15 @@ from image_processing.calculate_mean_intensities import calculate_mean_intensiti
 from image_processing.create_gif_from_images import create_gif_from_images
 from firebase_io.upload_gif_file import upload_gif_file
 from image_processing.calculate_green_object_area import calculate_green_object_area
+from image_processing.cut_and_save_circle_snippet import cut_and_save_circle_snippet
 from config import (
     INTERVAL_SECONDS,
     COORDINATES,
     ROTATION_ANGLE,
     CHAMBER,
     PLATE_ID,
-    RAW_COORDINATES
+    RAW_COORDINATES,
+    CIRCLE_COORDS
 )
 
 def run_capture_loop():
@@ -29,7 +31,8 @@ def run_capture_loop():
 
         upload_raw_image(image_path, CHAMBER, timestamp)
 
-        snippet_path = cut_and_save_snippet(image_path, COORDINATES, PLATE_ID, CHAMBER)
+        # snippet_path = cut_and_save_snippet(image_path, COORDINATES, PLATE_ID, CHAMBER)
+        snippet_path = cut_and_save_circle_snippet(image_path, CIRCLE_COORDS, PLATE_ID, CHAMBER)
 
         upload_snippet_to_firebase(
             snippet_path,
