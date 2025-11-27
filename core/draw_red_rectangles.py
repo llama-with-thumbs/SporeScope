@@ -9,7 +9,7 @@ def draw_red_rectangle(image_path):
             print("Error: Unable to load image")
             return
 
-        x, y, width, height = 630, 520, 2100, 1450
+        x, y, width, height = 250, 210, 500, 500
         cv2.rectangle(image, (x, y), (x + width, y + height), (0, 0, 255), 10)
 
         base, ext = os.path.splitext(image_path)
