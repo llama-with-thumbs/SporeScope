@@ -47,8 +47,8 @@ def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp, mean_i
     db = firestore.client()
 
     # --- Chamber doc (shared for all plates) ---
-    bio_chart_collection = db.collection('bio-chart')
-    chamber_doc_ref = bio_chart_collection.document(chamber)
+    sporescope_collection = db.collection('sporescope')
+    chamber_doc_ref = sporescope_collection.document(chamber)
 
     chamber_fields = {
         "chamber": chamber,

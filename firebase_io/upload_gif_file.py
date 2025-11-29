@@ -4,8 +4,8 @@ from firebase_admin import credentials, storage, firestore
 
 def upload_gif_file(gif_path, chamber, plate):
     # Initialize Firebase Admin SDK with credentials
-    cred = credentials.Certificate("bio-chart-firebase.json")
-    firebase_admin.initialize_app(cred, {"storageBucket": "bio-chart.appspot.com"})
+    cred = credentials.Certificate("firebase-adminsdk.json")
+    firebase_admin.initialize_app(cred, {"storageBucket": "sporescope.firebasestorage.app"})
 
     # Extract the file name from the gif_path
     file_name = os.path.basename(gif_path)
@@ -27,7 +27,7 @@ def upload_gif_file(gif_path, chamber, plate):
     db = firestore.client()
 
     # Add the new document to the specified collection
-    plate_doc_ref = db.collection('bio-chart').document(chamber).collection('plates').document(plate)
+    plate_doc_ref = db.collection('sporescope').document(chamber).collection('plates').document(plate)
 
     plate_doc_ref.update({
         'gif_path': firebase_gif_path

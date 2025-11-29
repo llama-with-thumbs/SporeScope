@@ -33,7 +33,7 @@ def upload_raw_image(image_path, chamber, timestamp):
     }
 
     # Add the new document to the specified collection
-    db.collection('bio-chart').document(chamber).collection('Raw images').add(new_document)
+    db.collection('sporescope').document(chamber).collection('Raw images').add(new_document)
 
     print("Document added successfully.")
 
