@@ -3,19 +3,37 @@ from firebase_admin import credentials, storage, firestore
 import os
 import config
 
-def upload_snippet_to_firebase(image_path, plates, chamber, timestamp, intensity, object_area):
+def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp, mean_intensities, green_object_areas):
     """
-    image_path: local path to snippet image
+    snippet_paths: list of local image paths (one per plate)
     plates: list of plate IDs (e.g. ["PLT-001", "PLT-002"])
     chamber: chamber ID string
     timestamp: ISO timestamp string
-    intensity: (mean_red, mean_green, mean_blue)
-    object_area: numeric area
+    mean_intensities: list of (mean_red, mean_green, mean_blue) or single tuple
+    green_object_areas: list of numeric areas or single value
     """
+
+    # Normalize inputs to lists
+    if isinstance(snippet_paths, str):
+        snippet_paths = [snippet_paths]
+
+    if not isinstance(mean_intensities, list):
+        mean_intensities = [mean_intensities] * len(snippet_paths)
+
+    if not isinstance(green_object_areas, list):
+        green_object_areas = [green_object_areas] * len(snippet_paths)
+
+    if len(snippet_paths) != len(plates):
+        raise ValueError("snippet_paths and plates must have the same length.")
+
+    if len(mean_intensities) != len(snippet_paths):
+        raise ValueError("mean_intensities must match length of snippet_paths.")
+
+    if len(green_object_areas) != len(snippet_paths):
+        raise ValueError("green_object_areas must match length of snippet_paths.")
 
     # --- Init Firebase app once ---
     try:
-        # If no apps initialized yet, init
         if not firebase_admin._apps:
             cred = credentials.Certificate("firebase-adminsdk.json")
             firebase_admin.initialize_app(cred, {
@@ -25,18 +43,16 @@ def upload_snippet_to_firebase(image_path, plates, chamber, timestamp, intensity
         print(f"Error initializing Firebase: {e}")
         return
 
-    mean_red, mean_green, mean_blue = intensity
-
     bucket = storage.bucket()
     db = firestore.client()
 
     # --- Chamber doc (shared for all plates) ---
-    bioChartCollection = db.collection('sporescope')
-    chamber_doc_ref = bioChartCollection.document(chamber)
+    bio_chart_collection = db.collection('bio-chart')
+    chamber_doc_ref = bio_chart_collection.document(chamber)
 
     chamber_fields = {
         "chamber": chamber,
-        "last_update": timestamp
+        "last_update": timestamp,
     }
 
     chamber_doc = chamber_doc_ref.get()
@@ -45,12 +61,23 @@ def upload_snippet_to_firebase(image_path, plates, chamber, timestamp, intensity
 
     chamber_doc_ref.set(chamber_fields, merge=True)
 
-    # --- Common local filename ---
-    filename = os.path.basename(image_path)
-    local_path = image_path.replace("\\", "/")
+    # --- Loop over snippets / plates ---
+    for snippet_path, plate, intensity, object_area in zip(
+        snippet_paths, plates, mean_intensities, green_object_areas
+    ):
+        if intensity is None:
+            print(f"Skipping plate {plate}: mean_intensities is None for {snippet_path}")
+            continue
 
-    # --- Loop over plates ---
-    for plate in plates:
+        if object_area is None:
+            print(f"Skipping plate {plate}: green_object_area is None for {snippet_path}")
+            continue
+
+        mean_red, mean_green, mean_blue = intensity
+
+        local_path = snippet_path.replace("\\", "/")
+        filename = os.path.basename(local_path)
+
         # Storage path for this plate
         firebase_snippet_path = f"{chamber}/{plate}/{filename}"
 
@@ -65,7 +92,7 @@ def upload_snippet_to_firebase(image_path, plates, chamber, timestamp, intensity
             "plate": plate,
             "substrate": config.SUBSTRATE,
             "culture": config.CULTURE,
-            "most_recent_snippet_path": firebase_snippet_path
+            "most_recent_snippet_path": firebase_snippet_path,
         }
 
         # Snippet-level fields
@@ -77,7 +104,7 @@ def upload_snippet_to_firebase(image_path, plates, chamber, timestamp, intensity
             "mean_blue_intensity": mean_blue,
             "object_area": object_area,
             "plate": plate,
-            "chamber": chamber
+            "chamber": chamber,
         }
 
         # Plate doc under chamber
@@ -85,8 +112,8 @@ def upload_snippet_to_firebase(image_path, plates, chamber, timestamp, intensity
         plate_doc_ref.set(plate_fields, merge=True)
 
         # Snippet subcollection
-        snippet_doc_ref = plate_doc_ref.collection('snippets')
-        snippet_doc_ref.add(snippet_fields)
+        snippets_collection_ref = plate_doc_ref.collection('snippets')
+        snippets_collection_ref.add(snippet_fields)
 
         print(f"Document added successfully for plate {plate}.")
 
