@@ -41,5 +41,5 @@ def calculate_mean_intensities(image_paths):
 
 # Optional quick test
 if __name__ == "__main__":
-    test_paths = ["img1.jpg", "img2.jpg"]
+    test_paths = ["img1.png", "img2.png"]
     print(calculate_mean_intensities(test_paths))

@@ -23,5 +23,5 @@ def draw_red_rectangle(image_path):
 
 
 if __name__ == "__main__":
-    image_path = "test.jpg"
+    image_path = "test.png"
     draw_red_rectangle(image_path)

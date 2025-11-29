@@ -18,7 +18,7 @@ def draw_circles_on_image(image_path, circles, output_path="test_with_circles.pn
 
 
 if __name__ == "__main__":
-    image_path = "test.jpg"
+    image_path = "test.png"
 
     circles = [
         (505, 455, 250),

@@ -20,7 +20,7 @@ from config import (
     RAW_COORDINATES
 )
 timestamp = datetime.now().isoformat()
-image_path = "test.jpg"
+image_path = "test.png"
 
 rotate_and_crop_image(image_path, ROTATION_ANGLE, RAW_COORDINATES)
 upload_raw_image(image_path, CHAMBER, timestamp)

@@ -3,41 +3,41 @@ import firebase_admin
 from firebase_admin import credentials, storage, firestore
 
 def upload_raw_image(image_path, chamber, timestamp):
-    # Initialize Firebase Admin SDK with credentials
-    cred = credentials.Certificate("firebase-adminsdk.json")
-    firebase_admin.initialize_app(cred, {
-        'storageBucket': 'sporescope.firebasestorage.app'
-    })
-    # Reference to the Firebase Storage bucket
+    # Initialize Firebase Admin SDK only if not already initialized
+    if not firebase_admin._apps:
+        cred = credentials.Certificate("firebase-adminsdk.json")
+        firebase_admin.initialize_app(cred, {
+            'storageBucket': 'sporescope.firebasestorage.app'
+        })
+
     bucket = storage.bucket()
 
-    # Extract the file name from the firebase_image_path
+    # Ensure proper filename/path
+    image_path = image_path.replace("\\", "/")
     file_name = os.path.basename(image_path)
 
-    # Define the category and updated firebase_image_path
+    # If original filename ends with .png, rename it to .png in Firebase
+    if file_name.lower().endswith(".png"):
+        file_name = file_name[:-4] + ".png"
+
+    # Firebase storage path
     category = f"{chamber}/Raw images"
     firebase_image_path = f"{category}/{file_name}"
 
-    # Upload the image to Firebase Storage
-    blob = bucket.blob(firebase_image_path.replace("\\", "/"))
-    blob.upload_from_filename(image_path.replace("\\", "/"), content_type="image/jpeg")
+    # Upload image as PNG
+    blob = bucket.blob(firebase_image_path)
+    blob.upload_from_filename(image_path, content_type="image/png")
 
     print(f"Image uploaded to Firebase Storage at '{firebase_image_path}'")
 
-    # Create a Firestore client
+    # Firestore write
     db = firestore.client()
-
-    new_document = {
+    db.collection('sporescope').document(chamber).collection('Raw images').add({
         "creation date": timestamp,
         "path": firebase_image_path
-    }
-
-    # Add the new document to the specified collection
-    db.collection('sporescope').document(chamber).collection('Raw images').add(new_document)
+    })
 
     print("Document added successfully.")
 
-    # End the Firebase session
+    # Shut down Firebase for short-lived scripts
     firebase_admin.delete_app(firebase_admin.get_app())
-# Example usage:
-# save_raw_image("local_image.jpg", "remote_image.jpg")

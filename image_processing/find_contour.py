@@ -27,9 +27,9 @@ def draw_translucent_contours(base_image, contours, color, alpha=0.5):
     # Blend the overlay with the base image using the alpha (transparency) factor
     cv2.addWeighted(overlay, alpha, base_image, 1 - alpha, 0, base_image)
 
-# Load two images (assuming 'test.jpg' and 'test1.jpg' are the original images)
-image1 = cv2.imread('test.jpg')
-image2 = cv2.imread('test1.jpg')
+# Load two images (assuming 'test.png' and 'test1.png' are the original images)
+image1 = cv2.imread('test.png')
+image2 = cv2.imread('test1.png')
 
 # Resize both images to the same dimensions (425px x 530px in this case)
 image1 = cv2.resize(image1, (425, 530))

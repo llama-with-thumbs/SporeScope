@@ -7,17 +7,17 @@ def capture_image(timestamp, output_directory='captured_images'):
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
 
-        # Capture an image using fswebcam
-        image_filename = f"captured_image_{timestamp}.jpg"
+       # Save as PNG instead of JPG
+        image_filename = f"captured_image_{timestamp}.png"
         image_path = os.path.join(output_directory, image_filename)
 
         subprocess.run(
-            ["rpicam-still", "-o", image_path, "-n"],
+            ["rpicam-still", "-o", image_path, "-n", "--encoding", "png"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=True
         )
-
+        
         # Return the path of the captured image
         return image_path
         

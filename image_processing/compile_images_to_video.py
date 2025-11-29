@@ -3,7 +3,7 @@ import os
 import datetime
 
 def compile_images_into_video(image_directory, output_video_path, frame_rate):
-    image_files = [f for f in os.listdir(image_directory) if f.endswith('.jpg')]
+    image_files = [f for f in os.listdir(image_directory) if f.endswith('.png')]
     image_files.sort()  # Ensure filenames are sorted in numerical order
 
     if len(image_files) == 0:
