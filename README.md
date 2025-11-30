@@ -24,8 +24,12 @@ This project is designed to run on Raspberry Pi devices of different generations
     python app.py
 
 7. Run using tmux (for Raspberry Pi)
+    sudo apt install tmux
+
+    source .venv/bin/activate
     tmux
     python app.py
+    
     Ctrl+B then D to detach
     tmux attach to rejoin
    

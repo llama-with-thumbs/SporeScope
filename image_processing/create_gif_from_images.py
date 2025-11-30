@@ -12,14 +12,26 @@ def extract_date_time_from_filename(filename):
     #     raise ValueError("No timestamp found")
     # return datetime.strptime(match.group(0).replace('_', ':'), "%Y-%m-%dT%H:%M:%S.%f")
     datetime_str = filename.split("_")[-1].split(".")[0]
-    
+
+    # If datetime_str looks like YYYY-MM-DDTHHMMSS (no colons), insert colons for parsing
+    # e.g. 2025-11-29T214924 -> 2025-11-29T21:49:24
+    m = re.match(r"(\d{4}-\d{2}-\d{2}T)(\d{2})(\d{2})(\d{2})(?:\.(\d+))?", datetime_str)
+    if m:
+        base = m.group(1)
+        hh, mm, ss = m.group(2), m.group(3), m.group(4)
+        frac = m.group(5)
+        if frac:
+            datetime_str = f"{base}{hh}:{mm}:{ss}.{frac}"
+        else:
+            datetime_str = f"{base}{hh}:{mm}:{ss}"
+
     # Attempt parsing with and without fractional seconds
     for fmt in ("%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S"):
         try:
             return datetime.strptime(datetime_str, fmt)
         except ValueError:
             continue
-    
+
     print(f"Error: time data '{datetime_str}' does not match expected format")
     return datetime.now()
 
@@ -72,9 +84,12 @@ def create_gif_from_images(input_folder, output_gif, width, duration, skip):
             else:
                 hours_passed = int((current_datetime - start_datetime).total_seconds() / 3600)
 
-            # Create a drawing context and font
+            # Create a drawing context and font (fall back to default if DejaVu not available)
             draw = ImageDraw.Draw(img_resized)
-            font = ImageFont.truetype("DejaVuSans.ttf", 20)  # Ensure the font is available on your system
+            try:
+                font = ImageFont.truetype("DejaVuSans.ttf", 20)
+            except Exception:
+                font = ImageFont.load_default()
             # Position and text color for the hours annotation
             position = (10, 10)
             text_color = (255, 255, 255)
@@ -96,8 +111,14 @@ def create_gif_from_images(input_folder, output_gif, width, duration, skip):
         images[0].save(output_gif_path, save_all=True, append_images=images[1:], duration=int(duration * 1000), loop=0)
 
         print(f"GIF created and saved as {output_gif_path} with a duration of {duration} seconds.")
+
+        # return the full path to the created GIF so callers can upload or further process it
+        return output_gif_path
     except Exception as e:
-        print(f"An error occurred: {str(e)}")
+        import traceback
+        print("An error occurred:")
+        traceback.print_exc()
+        return None
 
 if __name__ == "__main__":
     if len(sys.argv) != 6:

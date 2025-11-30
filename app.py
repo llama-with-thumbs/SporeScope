@@ -46,9 +46,15 @@ def run_capture_loop():
             mean_intensities,
             green_object_areas,
         )
-
-        # create_gif_from_images(f"captured_images/{CHAMBER}/{PLATE_ID}", f"{PLATE_ID}.gif", 200, 0.1, 10)
-        # upload_gif_file(f"output_gif_folder/{PLATE_ID}.gif", CHAMBER, PLATE_ID)
+        
+        # Create and upload GIFs for each plate in the config list
+        for plate in PLATE_ID:
+            gif_path = create_gif_from_images(f"captured_images/{CHAMBER}/{plate}", f"{plate}.gif", 200, 0.1, 10)
+            # Only attempt upload if GIF creation succeeded
+            if gif_path:
+                upload_gif_file(gif_path, CHAMBER, plate)
+            else:
+                print(f"Skipping upload for plate {plate}: GIF not created.")
 
         time.sleep(INTERVAL_SECONDS)
 
