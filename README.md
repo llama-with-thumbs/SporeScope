@@ -30,6 +30,7 @@ This project is designed to run on Raspberry Pi devices of different generations
     tmux
     python app.py
     
+    tmux ls
     Ctrl+B then D to detach
-    tmux attach to rejoin
+    tmux attach -t <session-name> to rejoin
    
