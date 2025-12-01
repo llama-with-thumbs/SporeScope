@@ -18,7 +18,7 @@ from config import (
     CHAMBER,
     PLATE_ID,
     RAW_COORDINATES,
-    CIRCLE_COORDS
+    CIRCLE_COORDS,
 )
 
 def run_capture_loop():
