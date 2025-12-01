@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from core.capture_image import capture_image
 from firebase_io.firebase_uploader import upload_snippet_to_firebase
@@ -23,8 +23,7 @@ from config import (
 
 def run_capture_loop():
     while True:
-        timestamp = datetime.now().isoformat()
-
+        timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         image_path = capture_image(timestamp)
 
         rotate_and_crop_image(image_path, ROTATION_ANGLE, RAW_COORDINATES)
