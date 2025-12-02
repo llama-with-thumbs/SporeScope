@@ -7,6 +7,7 @@ from datetime import datetime
 import re
 
 def extract_date_time_from_filename(filename):
+    # Take the last underscore-separated chunk, drop extension
     datetime_str = filename.split("_")[-1].split(".")[0]
 
     # Handle compact time like YYYY-MM-DDTHHMMSS or YYYY-MM-DDTHHMMSS.xxx
@@ -20,14 +21,25 @@ def extract_date_time_from_filename(filename):
         else:
             datetime_str = f"{base}{hh}:{mm}:{ss}"
 
-    for fmt in ("%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S"):
-        try:
-            return datetime.strptime(datetime_str, fmt)
-        except ValueError:
-            continue
+    # Drop trailing 'Z' if present
+    datetime_str = datetime_str.rstrip("Z")
 
-    print(f"Warning: time data '{datetime_str}' does not match expected format, using now()")
-    return datetime.now()
+    # We only care about date + hour:minute (ignore seconds and below)
+    try:
+        date_part, time_part = datetime_str.split("T")
+        # drop fractional part if any: HH:MM:SS(.fff) -> HH:MM:SS
+        time_part = time_part.split(".")[0]
+        time_parts = time_part.split(":")
+        if len(time_parts) < 2:
+            raise ValueError
+
+        hh, mm = time_parts[0], time_parts[1]
+        truncated = f"{date_part}T{hh}:{mm}"   # e.g. 2025-12-02T15:51
+
+        return datetime.strptime(truncated, "%Y-%m-%dT%H:%M")
+    except Exception:
+        print(f"Warning: time data '{datetime_str}' does not match expected format, using now()")
+        return datetime.now()
 
 def create_gif_from_images(input_folder, output_gif, width, duration, skip):
     try:
