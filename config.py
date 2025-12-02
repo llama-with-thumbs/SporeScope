@@ -7,6 +7,7 @@ RAW_COORDINATES = [630, 520, 2100, 1450]
 CIRCLE_COORDS = [
         (505, 455, 250),
         (1065, 450, 250),
+        (1625, 440, 250),
     ]
 
 # --- Experiment Metadata ---
