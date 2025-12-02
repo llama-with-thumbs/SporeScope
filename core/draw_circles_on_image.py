@@ -23,6 +23,7 @@ if __name__ == "__main__":
     circles = [
         (505, 455, 250),
         (1065, 450, 250),
+        (1625, 440, 250),
     ]
 
     draw_circles_on_image(image_path, circles)

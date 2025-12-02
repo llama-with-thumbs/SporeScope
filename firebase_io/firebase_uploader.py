@@ -3,15 +3,24 @@ from firebase_admin import credentials, storage, firestore
 import os
 import config
 
-def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp,
-                               mean_intensities, green_object_areas):
+def upload_snippet_to_firebase(
+    snippet_paths,
+    plates,
+    chamber,
+    timestamp,
+    mean_intensities,
+    green_object_areas,
+    plate_start_times,
+):
     """
     snippet_paths: list of local image paths (one per plate)
     plates: list of plate IDs (e.g. ["PLT-001", "PLT-002"])
     chamber: chamber ID string
-    timestamp: ISO timestamp string
+    timestamp: ISO timestamp string (capture time)
     mean_intensities: list of (mean_red, mean_green, mean_blue) or single tuple
     green_object_areas: list of numeric areas or single value
+    plate_start_times: ISO timestamp string or list of strings
+                       (when plate/control was installed), aligned with plates
     """
 
     # Normalize inputs to lists
@@ -36,16 +45,25 @@ def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp,
     # --- CULTURE handling: associate one culture per snippet/plate ---
     cultures = config.CULTURE  # may be a list or a single string
 
-    # Normalize to list
     if isinstance(cultures, str):
         cultures = [cultures]
 
-    # If only one culture given, reuse it for all snippets
     if len(cultures) == 1 and len(snippet_paths) > 1:
         cultures = cultures * len(snippet_paths)
     elif len(cultures) != len(snippet_paths):
         raise ValueError(
             "Length of config.CULTURE must be 1 or equal to number of snippet_paths."
+        )
+
+    # --- PLATE START TIME handling ---
+    if isinstance(plate_start_times, str):
+        plate_start_times = [plate_start_times]
+
+    if len(plate_start_times) == 1 and len(snippet_paths) > 1:
+        plate_start_times = plate_start_times * len(snippet_paths)
+    elif len(plate_start_times) != len(snippet_paths):
+        raise ValueError(
+            "Length of plate_start_times must be 1 or equal to number of snippet_paths."
         )
 
     # --- Init Firebase app once ---
@@ -77,9 +95,9 @@ def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp,
 
     chamber_doc_ref.set(chamber_fields, merge=True)
 
-    # --- Loop over snippets / plates / cultures ---
-    for snippet_path, plate, intensity, object_area, culture in zip(
-        snippet_paths, plates, mean_intensities, green_object_areas, cultures
+    # --- Loop over snippets / plates / cultures / start times ---
+    for snippet_path, plate, intensity, object_area, culture, plate_start_time in zip(
+        snippet_paths, plates, mean_intensities, green_object_areas, cultures, plate_start_times
     ):
         if intensity is None:
             print(f"Skipping plate {plate}: mean_intensities is None for {snippet_path}")
@@ -94,7 +112,7 @@ def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp,
         local_path = snippet_path.replace("\\", "/")
         filename = os.path.basename(local_path)
 
-        # Storage path for this plate
+        # Storage path for this plate snippet
         firebase_snippet_path = f"{chamber}/{plate}/{filename}"
 
         # Upload image
@@ -102,12 +120,17 @@ def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp,
         blob.upload_from_filename(local_path, content_type="image/jpeg")
         print(f"Image uploaded to Firebase Storage at '{firebase_snippet_path}' for plate {plate}")
 
+        # --- Deterministic GIF path for this plate ---
+        gif_path = f"output_gif_folder/{plate}.gif"
+
         # Plate-level fields
         plate_fields = {
             "last_update": timestamp,
             "plate": plate,
             "substrate": config.SUBSTRATE,
-            "culture": culture,  # 👈 culture for this plate/snippet
+            "culture": culture,
+            "plate_start_time": plate_start_time,
+            "gif_path": gif_path,
             "most_recent_snippet_path": firebase_snippet_path,
         }
 
@@ -121,7 +144,8 @@ def upload_snippet_to_firebase(snippet_paths, plates, chamber, timestamp,
             "object_area": object_area,
             "plate": plate,
             "chamber": chamber,
-            "culture": culture,  # 👈 also store on snippet document
+            "culture": culture,
+            "plate_start_time": plate_start_time,
         }
 
         # Plate doc under chamber
