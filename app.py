@@ -19,6 +19,7 @@ from config import (
     PLATE_ID,
     RAW_COORDINATES,
     CIRCLE_COORDS,
+    PLATE_START_TIME,
 )
 
 def run_capture_loop():
@@ -44,6 +45,7 @@ def run_capture_loop():
             timestamp,
             mean_intensities,
             green_object_areas,
+            PLATE_START_TIME
         )
         
         # Create and upload GIFs for each plate in the config list
