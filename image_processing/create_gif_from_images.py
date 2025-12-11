@@ -78,7 +78,7 @@ def create_gif_from_images(input_folder, output_gif, width, duration, skip):
 
     for fname, dt in items:
         path = os.path.join(input_folder, fname)
-        img = Image.open(path).convert("RGB")
+        img = Image.open(path).convert("RGBA")
 
         h = int(img.height * (width / img.width))
         img = img.resize((width, h))
