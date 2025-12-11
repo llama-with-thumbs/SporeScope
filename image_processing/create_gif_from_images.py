@@ -8,7 +8,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 def extract_datetime(filename):
-    m = re.search(r"(\d{4}-\d{2}-\d{2}T\d{2}_\d{2}_\d{2})Z?", filename)
+    # Format: 2025-12-07T09_14_14Z or 2025-12-11T20:47:52Z
+    m = re.search(r"(\d{4}-\d{2}-\d{2}T\d{2}[_:]\d{2}[_:]\d{2})Z?", filename)
     if m:
         ts = m.group(1).replace("_", ":")
         try:
@@ -16,6 +17,7 @@ def extract_datetime(filename):
         except:
             pass
 
+    # Format: 2025-12-07T091414
     m2 = re.search(r"(\d{4}-\d{2}-\d{2}T)(\d{6})", filename)
     if m2:
         base, raw = m2.group(1), m2.group(2)
