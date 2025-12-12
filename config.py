@@ -14,7 +14,9 @@ CIRCLE_COORDS = [
     ]
 
 # --- Experiment Metadata ---
-SUBSTRATE = "Agar plate 100mm diameter"
+SUBSTRATE = "Agar plate 58mm diameter"
+DIAMETER_PX = 500
+DIAMETER_MM = 58
 CULTURE = ["Control", "black morel, liquid culture", "Entheogen Explosion", "Golden Teacher Cubensis", "Golden Teacher Cubensis", "Golden Teacher Cubensis"]
 PLATE_START_TIME = ["2025-11-29T11:47:02Z", "2025-12-01T11:20:15Z", "2025-12-01T21:40:00Z", "2025-12-11T21:50:00Z", "2025-12-11T21:51:00Z", "2025-12-11T21:52:00Z"]
 # --- Identification ---
