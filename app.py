@@ -65,7 +65,7 @@ def run_capture_loop():
             mean_intensities,
             green_object_areas,
             PLATE_START_TIME,
-            countours_list,
+            contours_list,
             area_list,
         )
         
