@@ -42,13 +42,20 @@ def run_capture_loop():
         mean_intensities = calculate_mean_intensities(snippet_paths)
         green_object_areas = calculate_green_object_area(snippet_paths)
 
-        countours_list = []
+        contours_list = []
         area_list = []
+
         for snippet_path in snippet_paths:
             contours = calculate_contour(snippet_path)
-            area_mm2 = calculate_contour_areas_mm2(contours, DIAMETER_PX, DIAMETER_MM)
-            area_list.append(area_mm2)
-            countours_list.append(area_mm2)
+
+            areas_mm2, total_area_mm2 = calculate_contour_areas_mm2(
+                contours,
+                DIAMETER_PX,
+                DIAMETER_MM
+            )
+
+            contours_list.append(contours)        # ✅ store contours
+            area_list.append(total_area_mm2)      # ✅ store total area
 
         upload_snippet_to_firebase(
             snippet_paths,
