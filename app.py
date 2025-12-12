@@ -11,6 +11,8 @@ from image_processing.create_gif_from_images import create_gif_from_images
 from firebase_io.upload_gif_file import upload_gif_file
 from image_processing.calculate_green_object_area import calculate_green_object_area
 from image_processing.cut_and_save_circle_snippets import cut_and_save_circle_snippets
+from image_processing.calculate_contour import calculate_contour
+from image_processing.calculate_contour_areas_mm2 import calculate_contour_areas_mm2
 from config import (
     INTERVAL_SECONDS,
     COORDINATES,
@@ -20,6 +22,8 @@ from config import (
     RAW_COORDINATES,
     CIRCLE_COORDS,
     PLATE_START_TIME,
+    DIAMETER_MM,
+    DIAMETER_PX
 )
 
 def run_capture_loop():
@@ -34,9 +38,17 @@ def run_capture_loop():
         # snippet_path = cut_and_save_snippet(image_path, COORDINATES, PLATE_ID, CHAMBER)
         
         snippet_paths = cut_and_save_circle_snippets(image_path, CIRCLE_COORDS, PLATE_ID, CHAMBER)
-        
+
         mean_intensities = calculate_mean_intensities(snippet_paths)
         green_object_areas = calculate_green_object_area(snippet_paths)
+
+        countours_list = []
+        area_list = []
+        for snippet_path in snippet_paths:
+            contours = calculate_contour(snippet_path)
+            area_mm2 = calculate_contour_areas_mm2(contours, DIAMETER_PX, DIAMETER_MM)
+            area_list.append(area_mm2)
+            countours_list.append(area_mm2)
 
         upload_snippet_to_firebase(
             snippet_paths,
@@ -45,7 +57,9 @@ def run_capture_loop():
             timestamp,
             mean_intensities,
             green_object_areas,
-            PLATE_START_TIME
+            PLATE_START_TIME,
+            countours_list,
+            area_list,
         )
         
         # Create and upload GIFs for each plate in the config list
