@@ -48,15 +48,15 @@ def run_capture_loop():
         for snippet_path in snippet_paths:
             contours = calculate_contour(snippet_path)
 
-            areas_mm2, total_area_mm2 = calculate_contour_areas_mm2(
+            total_area_mm2 = calculate_contour_areas_mm2(
                 contours,
                 DIAMETER_PX,
                 DIAMETER_MM
             )
 
-            contours_list.append(contours)        # ✅ store contours
-            area_list.append(total_area_mm2)      # ✅ store total area
-
+            contours_list.append(contours)
+            area_list.append(total_area_mm2)
+            
         upload_snippet_to_firebase(
             snippet_paths,
             PLATE_ID,
