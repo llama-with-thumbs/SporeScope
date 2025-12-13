@@ -146,10 +146,15 @@ def upload_snippet_to_firebase(
         # ----------------------------
         # Serialize contours for Firestore
         # ----------------------------
-        serialized_contours = [
-            [{"x": int(p[0][0]), "y": int(p[0][1])} for p in contour]
-            for contour in contours
-        ]
+        serialized_contours = []
+
+        for contour_id, contour in enumerate(contours):
+            for p in contour:
+                serialized_contours.append({
+                    "contour_id": contour_id,
+                    "x": int(p[0][0]),
+                    "y": int(p[0][1]),
+                })
 
         snippet_fields = {
             "creation_date": timestamp,
