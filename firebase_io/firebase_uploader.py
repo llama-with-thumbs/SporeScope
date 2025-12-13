@@ -147,7 +147,7 @@ def upload_snippet_to_firebase(
         # Serialize contours for Firestore
         # ----------------------------
         serialized_contours = [
-            [(int(p[0][0]), int(p[0][1])) for p in contour]
+            [{"x": int(p[0][0]), "y": int(p[0][1])} for p in contour]
             for contour in contours
         ]
 
