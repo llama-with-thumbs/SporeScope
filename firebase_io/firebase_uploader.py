@@ -11,6 +11,7 @@ def upload_snippet_to_firebase(
     mean_intensities,
     green_object_areas,
     plate_start_times,
+    shapes_lists
 ):
     """
     snippet_paths: list of local image paths (one per plate)
@@ -21,6 +22,8 @@ def upload_snippet_to_firebase(
     green_object_areas: list of numeric areas or single value
     plate_start_times: ISO timestamp string or list of strings
                        (when plate/control was installed), aligned with plates
+    shapes_lists: list where each element corresponds to one snippet and contains
+                  a list of shapes; each shape is a list of coordinate pairs
     """
 
     # Normalize inputs to lists
@@ -96,8 +99,8 @@ def upload_snippet_to_firebase(
     chamber_doc_ref.set(chamber_fields, merge=True)
 
     # --- Loop over snippets / plates / cultures / start times ---
-    for snippet_path, plate, intensity, object_area, culture, plate_start_time in zip(
-        snippet_paths, plates, mean_intensities, green_object_areas, cultures, plate_start_times
+    for snippet_path, plate, intensity, object_area, culture, plate_start_time, shapes_list in zip(
+        snippet_paths, plates, mean_intensities, green_object_areas, cultures, plate_start_times, shapes_lists
     ):
         if intensity is None:
             print(f"Skipping plate {plate}: mean_intensities is None for {snippet_path}")
@@ -154,7 +157,33 @@ def upload_snippet_to_firebase(
 
         # Snippet subcollection
         snippets_collection_ref = plate_doc_ref.collection('snippets')
-        snippets_collection_ref.add(snippet_fields)
+        snippet_doc_ref = snippets_collection_ref.add(snippet_fields)[1]
+
+
+        shapes_collection = snippet_doc_ref.collection("shapes")
+        for shape_num, contour in enumerate(shapes_list, start=1):
+
+            # --- Handle NumPy arrays OR Python lists ---
+            if hasattr(contour, "squeeze"):
+                # OpenCV contour → ndarray (N,1,2) → (N,2)
+                coords = contour.squeeze().tolist()
+            else:
+                # Already a Python list → ensure it is list of pairs
+                coords = contour
+
+            # Make sure coords is list of [x, y]
+            # Some detection functions return [[[x, y]], ...]
+            cleaned_coords = []
+            for p in coords:
+                if isinstance(p, (list, tuple)) and len(p) == 1:
+                    # unwrap [[x,y]] → [x,y]
+                    p = p[0]
+                cleaned_coords.append({"x": int(p[0]), "y": int(p[1])})
+
+            # Save to Firestore
+            shapes_collection.document(f"shape_{shape_num}").set({
+                "coordinates": cleaned_coords
+            })
 
         print(f"Document added successfully for plate {plate}.")
 
