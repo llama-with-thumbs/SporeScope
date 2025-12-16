@@ -45,8 +45,8 @@ def upload_snippet_to_firebase(
     if len(green_object_areas) != len(snippet_paths):
         raise ValueError("green_object_areas must match length of snippet_paths.")
 
-    # --- CULTURE handling: associate one culture per snippet/plate ---
-    cultures = config.CULTURE  # may be a list or a single string
+    # --- CULTURE handling ---
+    cultures = config.CULTURE
 
     if isinstance(cultures, str):
         cultures = [cultures]
@@ -83,7 +83,7 @@ def upload_snippet_to_firebase(
     bucket = storage.bucket()
     db = firestore.client()
 
-    # --- Chamber doc (shared for all plates) ---
+    # --- Chamber document ---
     sporescope_collection = db.collection('sporescope')
     chamber_doc_ref = sporescope_collection.document(chamber)
 
@@ -98,7 +98,7 @@ def upload_snippet_to_firebase(
 
     chamber_doc_ref.set(chamber_fields, merge=True)
 
-    # --- Loop over snippets / plates / cultures / start times ---
+    # --- MAIN LOOP ---
     for snippet_path, plate, intensity, object_area, culture, plate_start_time, shapes_list in zip(
         snippet_paths, plates, mean_intensities, green_object_areas, cultures, plate_start_times, shapes_lists
     ):
@@ -115,27 +115,13 @@ def upload_snippet_to_firebase(
         local_path = snippet_path.replace("\\", "/")
         filename = os.path.basename(local_path)
 
-        # Storage path for this plate snippet
         firebase_snippet_path = f"{chamber}/{plate}/{filename}"
 
-        # Upload image
         blob = bucket.blob(firebase_snippet_path)
         blob.upload_from_filename(local_path, content_type="image/jpeg")
         print(f"Image uploaded to Firebase Storage at '{firebase_snippet_path}' for plate {plate}")
 
-        # --- Deterministic GIF path for this plate ---
         gif_path = f"output_gif_folder/{plate}.gif"
-
-        # Plate-level fields
-        plate_fields = {
-            "last_update": timestamp,
-            "plate": plate,
-            "substrate": config.SUBSTRATE,
-            "culture": culture,
-            "plate_start_time": plate_start_time,
-            "gif_path": gif_path,
-            "most_recent_snippet_path": firebase_snippet_path,
-        }
 
         # Snippet-level fields
         snippet_fields = {
@@ -151,43 +137,54 @@ def upload_snippet_to_firebase(
             "plate_start_time": plate_start_time,
         }
 
-        # Plate doc under chamber
+        # Plate document reference
         plate_doc_ref = chamber_doc_ref.collection('plates').document(plate)
-        plate_doc_ref.set(plate_fields, merge=True)
+        plate_doc_ref.set({
+            "last_update": timestamp
+        }, merge=True)
 
-        # Snippet subcollection
+        # Snippets subcollection
         snippets_collection_ref = plate_doc_ref.collection('snippets')
+
+        # --- CREATE SNIPPET DOCUMENT FIRST ---
         snippet_doc_ref = snippets_collection_ref.add(snippet_fields)[1]
 
-
+        # --- SHAPES SUBCOLLECTION ---
         shapes_collection = snippet_doc_ref.collection("shapes")
-        for shape_num, contour in enumerate(shapes_list, start=1):
 
-            # --- Handle NumPy arrays OR Python lists ---
+        for shape_num, contour in enumerate(shapes_list, start=1):
             if hasattr(contour, "squeeze"):
-                # OpenCV contour → ndarray (N,1,2) → (N,2)
                 coords = contour.squeeze().tolist()
             else:
-                # Already a Python list → ensure it is list of pairs
                 coords = contour
 
-            # Make sure coords is list of [x, y]
-            # Some detection functions return [[[x, y]], ...]
             cleaned_coords = []
             for p in coords:
                 if isinstance(p, (list, tuple)) and len(p) == 1:
-                    # unwrap [[x,y]] → [x,y]
                     p = p[0]
                 cleaned_coords.append({"x": int(p[0]), "y": int(p[1])})
 
-            # Save to Firestore
             shapes_collection.document(f"shape_{shape_num}").set({
                 "coordinates": cleaned_coords
             })
 
+        # --- NOW UPDATE PLATE FIELDS BECAUSE snippet_doc_ref EXISTS ---
+        plate_fields = {
+            "last_update": timestamp,
+            "plate": plate,
+            "substrate": config.SUBSTRATE,
+            "culture": culture,
+            "plate_start_time": plate_start_time,
+            "gif_path": gif_path,
+            "most_recent_snippet_path": firebase_snippet_path,
+            "most_recent_snippet_in_firestore_path": snippet_doc_ref.path
+        }
+
+        plate_doc_ref.set(plate_fields, merge=True)
+
         print(f"Document added successfully for plate {plate}.")
 
-    # --- Clean up Firebase app (optional, good for short-lived scripts) ---
+    # --- CLEANUP ---
     try:
         if firebase_admin._apps:
             firebase_admin.delete_app(firebase_admin.get_app())
