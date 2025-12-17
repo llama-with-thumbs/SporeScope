@@ -43,9 +43,13 @@ def run_capture_loop():
         green_object_areas = calculate_green_object_area(snippet_paths)
 
         shapes_lists = []
+        total_shapes_area_lists = []
+
         for snippet_path in snippet_paths:
-            contours = calculate_contour(snippet_path)
-            shapes_lists.append(contours)
+            shapes = calculate_contour(snippet_path)
+            shapes_area = calculate_contour_areas_mm2(shapes)
+            shapes_lists.append(shapes)
+            total_shapes_area_lists.append(shapes_area)
 
         upload_snippet_to_firebase(
             snippet_paths,
@@ -56,6 +60,7 @@ def run_capture_loop():
             green_object_areas,
             PLATE_START_TIME,
             shapes_lists,
+            total_shapes_area_lists
         )
         
         # Create and upload GIFs for each plate in the config list

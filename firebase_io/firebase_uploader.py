@@ -11,7 +11,8 @@ def upload_snippet_to_firebase(
     mean_intensities,
     green_object_areas,
     plate_start_times,
-    shapes_lists
+    shapes_lists,
+    total_shapes_area_lists
 ):
     """
     snippet_paths: list of local image paths (one per plate)
@@ -99,8 +100,8 @@ def upload_snippet_to_firebase(
     chamber_doc_ref.set(chamber_fields, merge=True)
 
     # --- MAIN LOOP ---
-    for snippet_path, plate, intensity, object_area, culture, plate_start_time, shapes_list in zip(
-        snippet_paths, plates, mean_intensities, green_object_areas, cultures, plate_start_times, shapes_lists
+    for snippet_path, plate, intensity, object_area, culture, plate_start_time, shapes_list, total_shapes_area in zip(
+        snippet_paths, plates, mean_intensities, green_object_areas, cultures, plate_start_times, shapes_lists, total_shapes_area_lists
     ):
         if intensity is None:
             print(f"Skipping plate {plate}: mean_intensities is None for {snippet_path}")
@@ -135,6 +136,7 @@ def upload_snippet_to_firebase(
             "chamber": chamber,
             "culture": culture,
             "plate_start_time": plate_start_time,
+            "total_shape_area_mm2": total_shapes_area
         }
 
         # Plate document reference
@@ -177,7 +179,8 @@ def upload_snippet_to_firebase(
             "plate_start_time": plate_start_time,
             "gif_path": gif_path,
             "most_recent_snippet_path": firebase_snippet_path,
-            "most_recent_snippet_in_firestore_path": snippet_doc_ref.path
+            "most_recent_snippet_in_firestore_path": snippet_doc_ref.path,
+            "total_shape_area_mm2": total_shapes_area
         }
 
         plate_doc_ref.set(plate_fields, merge=True)
