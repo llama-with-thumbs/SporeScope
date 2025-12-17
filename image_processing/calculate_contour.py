@@ -114,9 +114,9 @@ def calculate_contour(image_path, min_area=300, safe_radius_ratio=0.87, bbox_mar
 
     cv2.drawContours(result, filtered, -1, (0, 255, 0), 2)
 
-    # --- Display ---
-    cv2.imshow("Detected mycelium (enhanced edge filtering)", result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # # --- Display ---
+    # cv2.imshow("Detected mycelium (enhanced edge filtering)", result)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     return filtered
