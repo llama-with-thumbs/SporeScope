@@ -2,10 +2,13 @@ import cv2
 import numpy as np
 
 
-def calculate_contour(image_path, min_area=300, safe_radius_ratio=0.87):
+def calculate_contour(image_path, min_area=300, safe_radius_ratio=0.87, bbox_margin=10):
     """
-    Detect and display dark mycelium blobs on a bright agar plate.
-    Filters out detections near edges and corners using a circular mask.
+    Detect dark mycelium blobs on a bright agar plate.
+    Filters out detections near edges/corners using:
+      - circular safe-radius exclusion
+      - point-distance filtering
+      - bounding-box margin filtering
     """
 
     # Load with alpha channel
@@ -70,6 +73,7 @@ def calculate_contour(image_path, min_area=300, safe_radius_ratio=0.87):
         if area > 0.25 * h * w:
             continue
 
+        # centroid
         M = cv2.moments(c)
         if M["m00"] == 0:
             continue
@@ -77,29 +81,42 @@ def calculate_contour(image_path, min_area=300, safe_radius_ratio=0.87):
         cx_c = int(M["m10"] / M["m00"])
         cy_c = int(M["m01"] / M["m00"])
 
-        # Distance from image center
+        # Distance from image center (main safe-circle filter)
         d = np.sqrt((cx_c - cx) ** 2 + (cy_c - cy) ** 2)
-
-        # Reject anything outside safe circle
         if d > safe_radius:
             continue
 
-         
+        # ------------------------------------------------------------------
+        # (1) Point-distance filter: if ANY contour point is outside safeRadius → reject
+        # ------------------------------------------------------------------
+        pts = c.reshape(-1, 2)
+        dists = np.sqrt((pts[:, 0] - cx) ** 2 + (pts[:, 1] - cy) ** 2)
+        if np.any(dists > safe_radius):
+            continue
+
+        # ------------------------------------------------------------------
+        # (2) Bounding-box margin filter: reject contours too close to edge
+        # ------------------------------------------------------------------
+        x, y, bw, bh = cv2.boundingRect(c)
+        if (x < bbox_margin or
+            y < bbox_margin or
+            x + bw > w - bbox_margin or
+            y + bh > h - bbox_margin):
+            continue
 
         filtered.append(c)
 
-    # # --- Draw result ---
-    # result = bgr.copy()
+    # --- Draw result ---
+    result = bgr.copy()
 
-    # # Optional: visualize safe circle
-    # cv2.circle(result, (cx, cy), safe_radius, (255, 0, 0), 1)
+    # Optional: visualize safe circle
+    cv2.circle(result, (cx, cy), safe_radius, (255, 0, 0), 1)
 
-    # cv2.drawContours(result, filtered, -1, (0, 255, 0), 2)
+    cv2.drawContours(result, filtered, -1, (0, 255, 0), 2)
 
-    # # --- Display ---
-    # cv2.imshow("Detected mycelium (circular edge filtered)", result)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    # --- Display ---
+    cv2.imshow("Detected mycelium (enhanced edge filtering)", result)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-    # ✅ RETURN NUMPY ARRAYS
     return filtered
