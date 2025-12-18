@@ -1,6 +1,7 @@
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
+from ai_integration.chatgpt_client import chatgpt_client
 from core.capture_image import capture_image
 from firebase_io.firebase_uploader import upload_snippet_to_firebase
 from image_processing.rotate_and_crop_image import rotate_and_crop_image
@@ -14,6 +15,7 @@ from image_processing.cut_and_save_circle_snippets import cut_and_save_circle_sn
 from image_processing.calculate_contour import calculate_contour
 from image_processing.calculate_contour_areas_mm2 import calculate_contour_areas_mm2
 from config import (
+    CULTURE,
     INTERVAL_SECONDS,
     COORDINATES,
     ROTATION_ANGLE,
@@ -50,6 +52,25 @@ def run_capture_loop():
             shapes_area = calculate_contour_areas_mm2(shapes)
             shapes_lists.append(shapes)
             total_shapes_area_lists.append(shapes_area)
+
+        elapsed_hours_list = []
+        LOCAL_TZ = timezone(timedelta(hours=-5))
+        now = datetime.now(LOCAL_TZ)
+        for plate_start_time in PLATE_START_TIME:
+            start = datetime.fromisoformat(plate_start_time.replace("Z", "+00:00"))
+            elapsed_hours = round((now - start).total_seconds() / 3600, 1)
+            elapsed_hours_list.append(elapsed_hours)
+            
+        # get ChatGPT analysis for each plate
+        gpt_results = []
+        for plate, elapsed_hours, culture in zip(PLATE_ID, elapsed_hours_list, CULTURE):
+            cycle_data = f"""
+            Culture: {culture}
+            Elapsed time: {elapsed_hours:.2f} hours since inoculation.
+            Plate diameter: {DIAMETER_MM} mm 
+            """
+            gpt_result = chatgpt_client(snippet_path, cycle_data)
+            gpt_results.append(gpt_result)
 
         upload_snippet_to_firebase(
             snippet_paths,
