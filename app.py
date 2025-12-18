@@ -81,7 +81,8 @@ def run_capture_loop():
             green_object_areas,
             PLATE_START_TIME,
             shapes_lists,
-            total_shapes_area_lists
+            total_shapes_area_lists,
+            gpt_results
         )
         
         # Create and upload GIFs for each plate in the config list
