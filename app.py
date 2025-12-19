@@ -63,7 +63,7 @@ def run_capture_loop():
             
         # get ChatGPT analysis for each plate
         gpt_results = []
-        for plate, elapsed_hours, culture in zip(PLATE_ID, elapsed_hours_list, CULTURE):
+        for plate, elapsed_hours, culture, snippet_path in zip(PLATE_ID, elapsed_hours_list, CULTURE, snippet_paths):
             cycle_data = f"""
             Culture: {culture}
             Elapsed time: {elapsed_hours:.2f} hours since inoculation.
